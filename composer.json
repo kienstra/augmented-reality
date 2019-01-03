@@ -1,0 +1,20 @@
+{
+    "name": "root/augmented-reality",
+    "description": "Adds blocks for augmented reality experiences.",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Ryan Kienstra",
+            "email": "kienstraryan@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "*",
+        "phpcompatibility/phpcompatibility-wp": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
+    }
+}
