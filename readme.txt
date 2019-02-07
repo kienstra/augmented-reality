@@ -21,10 +21,6 @@ See augmented reality in WordPress.
 1. In the "Plugins" menu, find "Augmented Reality," and click "Activate."
 1. In the block editor, add an "AR Viewer" block.
 
-== Screenshots ==
-
-1.
-
 == Changelog ==
 
 = 0.1.0 =
