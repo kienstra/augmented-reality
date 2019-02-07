@@ -19,7 +19,7 @@ class Plugin {
 	 *
 	 * @var string
 	 */
-	const VERSION = '0.1';
+	const VERSION = '0.1.0';
 
 	/**
 	 * The slug of the plugin.
@@ -47,54 +47,42 @@ class Plugin {
 	 *
 	 * @var \stdClass
 	 */
-	public $component;
+	public $components;
 
 	/**
-	 * The instance of this class.
+	 * This plugin's PHP classes.
 	 *
-	 * @var Plugin
+	 * @var array
 	 */
-	public static $instance;
-
-	/**
-	 * Gets the instance of this plugin.
-	 *
-	 * @return Plugin $instance The plugin instance.
-	 */
-	public static function get_instance() {
-		if ( ! self::$instance instanceof Plugin ) {
-			self::$instance = new Plugin();
-		}
-		return self::$instance;
-	}
+	public $classes = array( 'Asset', 'Block' );
 
 	/**
 	 * Initiate the plugin.
 	 */
 	public function init() {
-		$this->load_files();
 		$this->init_classes();
 		$this->plugin_url = plugins_url( self::SLUG );
 		add_action( 'init', array( $this, 'plugin_localization' ) );
 	}
 
 	/**
-	 * Loads the plugin files.
-	 *
-	 * @return void.
-	 */
-	public function load_files() {
-		require_once dirname( __FILE__ ) . '/class-block.php';
-	}
-
-	/**
-	 * Instantiates and initializes the classes.
-	 *
-	 * @return void.
+	 * Inits the plugin classes.
 	 */
 	public function init_classes() {
-		$this->component        = new \stdClass();
-		$this->component->block = new Block( self::$instance );
+		$this->components = new \stdClass();
+		foreach ( $this->classes as $class ) {
+			$class_with_namespace = __NAMESPACE__ . '\\' . $class;
+
+			if ( class_exists( $class_with_namespace ) ) {
+				$this->components->$class = new $class_with_namespace( $this );
+			} else {
+				break;
+			}
+
+			if ( method_exists( $this->components->$class, 'init' ) ) {
+				$this->components->$class->init();
+			}
+		}
 	}
 
 	/**

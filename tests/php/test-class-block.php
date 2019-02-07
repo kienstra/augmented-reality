@@ -26,7 +26,18 @@ class Test_Block extends \WP_UnitTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->instance = new Block( Plugin::get_instance() );
+		$plugin = new Plugin();
+		$plugin->init();
+		$this->instance = new Block( $plugin );
+	}
+
+	/**
+	 * Test __construct().
+	 *
+	 * @covers __construct.
+	 */
+	public function test_construct() {
+		$this->assertEquals( __NAMESPACE__ . '\\Plugin', get_class( $this->instance->plugin ) );
 	}
 
 	/**
@@ -37,6 +48,7 @@ class Test_Block extends \WP_UnitTestCase {
 	public function test_init() {
 		$this->instance->init();
 		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', array( $this->instance, 'block_editor_assets' ) ) );
+		$this->assertEquals( 10, has_filter( 'wp_check_filetype_and_ext', array( $this->instance, 'check_filetype_and_ext' ) ) );
 	}
 
 	/**
@@ -47,18 +59,66 @@ class Test_Block extends \WP_UnitTestCase {
 	public function test_block_editor_assets() {
 		$this->instance->block_editor_assets();
 		$scripts = wp_scripts();
-		$i = $scripts;
-		$this->assertTrue( in_array( Block::JS_SLUG, $scripts->queue ) );
+		$slug    = Plugin::SLUG . '-' . Block::JS_FILE_NAME;
+		$script  = $scripts->registered[ $slug ];
+		$this->assertTrue( in_array( $slug, $scripts->queue ) );
 
-		$script = $scripts->registered[ Block::JS_SLUG ];
 		$this->assertEquals(
 			array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ),
 			$script->deps
 		);
 		$this->assertEmpty( $script->extra );
-		$this->assertEquals( BLOCK::JS_SLUG, $script->handle );
-		$this->assertEquals( BLOCK::JS_SLUG, $script->handle );
-		$this->assertContains( Plugin::SLUG . '/assets/js/' . Block::JS_SLUG . '.js', $script->src );
+		$this->assertEquals( $slug, $script->handle );
+		$this->assertContains( Plugin::SLUG . '/assets/js/blocks-compiled.js', $script->src );
 		$this->assertEquals( Plugin::VERSION, $script->ver );
+	}
+
+	/**
+	 * Test add_mime_types().
+	 *
+	 * @covers Plugin::add_mime_types().
+	 */
+	public function test_add_mime_types() {
+		$original_mime_types = array( 'gif' => 'image/gif' );
+		$filtered_mimes      = $this->instance->add_mime_types( $original_mime_types );
+
+		// The original mime types should still be present.
+		$this->assertEmpty( array_diff( $original_mime_types, $filtered_mimes ) );
+		$this->assertEquals( Block::OBJ_FILE_TYPE, $filtered_mimes['obj'] );
+		$this->assertEquals( 'application/glb', $filtered_mimes['glb'] );
+	}
+
+	/**
+	 * Test check_filetype_and_ext().
+	 *
+	 * @covers Plugin::check_filetype_and_ext().
+	 */
+	public function test_check_filetype_and_ext() {
+		$initial_wp_check_filetype_and_ext = array(
+			'ext'             => false,
+			'type'            => false,
+			'proper_filename' => false,
+		);
+		$wrong_filename                    = 'baz.gif';
+		$file                              = "example/$wrong_filename";
+
+		// This isn't an .obj file, so it should return the same value that it's passed.
+		$this->assertEquals(
+			$initial_wp_check_filetype_and_ext,
+			$this->instance->check_filetype_and_ext( $initial_wp_check_filetype_and_ext, $file, $wrong_filename )
+		);
+
+		$correct_filename = 'example.obj';
+		$file             = dirname( __DIR__ ) . '/fixtures/' . $correct_filename;
+
+		// This now passes an .obj file, so the filtered value should be different.
+		$this->assertEquals(
+			array(
+				'ext'             => 'obj',
+				'type'            => 'application/obj',
+				'proper_filename' => false,
+			),
+			$this->instance->check_filetype_and_ext( $initial_wp_check_filetype_and_ext, $file, $correct_filename )
+		);
 	}
 }

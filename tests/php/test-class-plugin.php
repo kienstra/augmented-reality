@@ -26,22 +26,7 @@ class Test_Plugin extends \WP_UnitTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->plugin = Plugin::get_instance();
-	}
-
-	/**
-	 * Test get_instance().
-	 *
-	 * @covers Plugin::get_instance().
-	 */
-	public function test_get_instance() {
-		$this->assertEquals( Plugin::get_instance(), $this->plugin );
-		$this->assertEquals( __NAMESPACE__ . '\Plugin', get_class( Plugin::get_instance() ) );
-
-		// Ensure that get_instance() instantiates Plugin correctly when Plugin::$instance is null.
-		Plugin::$instance = null;
-		$instance         = Plugin::get_instance();
-		$this->assertEquals( Plugin::$instance, $instance );
+		$this->plugin = new Plugin();
 	}
 
 	/**
@@ -56,21 +41,15 @@ class Test_Plugin extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test load_files().
-	 *
-	 * @covers Plugin::load_files().
-	 */
-	public function test_load_files() {
-		$this->assertTrue( class_exists( __NAMESPACE__ . '\\Block') );
-	}
-
-	/**
 	 * Test init_classes().
 	 *
 	 * @covers Plugin::init_classes().
 	 */
 	public function test_init_classes() {
-		$this->assertEquals( __NAMESPACE__ . '\\Block', get_class( $this->plugin->component->block ) );
+		$this->plugin->init_classes();
+		foreach ( $this->plugin->classes as $class ) {
+			$this->assertEquals( __NAMESPACE__ . '\\' . $class, get_class( $this->plugin->components->$class ) );
+		}
 	}
 
 	/**
