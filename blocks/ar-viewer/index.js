@@ -28,46 +28,40 @@ export default registerBlockType(
 			__( 'Augmented Reality', 'augmented-reality' ),
 		],
 		attributes: {
-			itemURL: {
+			objUrl: {
 				type: 'string',
 				source: 'attribute',
 				attribute: 'data-ar-url',
 				selector: '#enter-ar-info',
 			},
-			imgID: {
+			objId: {
 				type: 'number',
 			}
 		},
 		edit: props => {
-			const { attributes: { imgID, itemURL },
+			const { attributes: { objId, objUrl, mtlId, mtlUrl },
 				className, setAttributes, isSelected } = props;
-			const onSelectImage = img => {
-				setAttributes( {
-					imgID: img.id,
-					itemURL: img.url,
-				} );
-			};
-			const onRemoveImage = () => {
-				setAttributes({
-					imgID: null,
-					itemURL: null,
-				});
-			}
+
 			return (
 				<div className={ className }>
 
-					{ ! imgID ? (
+					{ ! objId ? (
 
 						<MediaUpload
-							onSelect={ onSelectImage }
+							onSelect={ img => {
+								setAttributes( {
+									objId: img.id,
+									objUrl: img.url,
+								} );
+							} }
 							type="image"
-							value={ imgID }
+							value={ objId }
 							render={ ( { open } ) => (
 								<Button
 									className={ "button button-large" }
 									onClick={ open }
 								>
-									{ __( ' Upload Image', 'jsforwpblocks' ) }
+									{ __( 'Upload Image', 'augmented-reality' ) }
 								</Button>
 							) }
 						>
@@ -78,30 +72,82 @@ export default registerBlockType(
 						<p class="image-wrapper">
 							{ __( 'Augmented Reality .obj file', 'augmented-reality' ) }
 							<img
-								src={ itemURL }
+								src={ objUrl }
 							/>
 
 							{ isSelected ? (
 
 								<Button
 									className="remove-image"
-									onClick={ onRemoveImage }
+									onClick={ () => {
+										setAttributes({
+											objId: null,
+											objUrl: null,
+										} );
+									} }
 								>
 								</Button>
 
 							) : null }
 
 						</p>
-					)}
+					) }
 
+					{ ! mtlId ? (
+
+						<MediaUpload
+							onSelect={ img => {
+								setAttributes( {
+									mtlId: img.id,
+									mtlUrl: img.url,
+								} );
+							} }
+							type="image"
+							value={ mtlId }
+							render={ ( { open } ) => (
+								<Button
+									className={ "button button-large" }
+									onClick={ open }
+								>
+									{ __( 'Upload Image', 'augmented-reality' ) }
+								</Button>
+							) }
+						>
+						</MediaUpload>
+
+					) : (
+
+						<p class="image-wrapper">
+							{ __( '.mtl file', 'augmented-reality' ) }
+							<img
+								src={ mtlUrl }
+							/>
+
+							{ isSelected ? (
+
+								<Button
+									className="remove-image"
+									onClick={ () => {
+										setAttributes({
+											mtlId: null,
+											mtlUrl: null,
+										} );
+									} }
+								>
+								</Button>
+
+							) : null }
+
+						</p>
+					) }
 				</div>
 			);
 		},
 		save: props => {
-			const { itemURL } = props.attributes;
+			const { objUrl, mtlUrl } = props.attributes;
 			return (
 				<div>
-					<div id="enter-ar-info" class="demo-card mdl-card mdl-shadow--4dp" data-ar-url={ itemURL }>
+					<div id="enter-ar-info" class="demo-card mdl-card mdl-shadow--4dp" data-obj-url={ objUrl } data-mtl-url={ mtlUrl }>
 						<div class="mdl-card__title">
 							<h2 class="mdl-card__title-text">{ __( 'Augmented Reality Experience', 'augmented-reality' ) }</h2>
 						</div>

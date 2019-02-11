@@ -17,8 +17,7 @@
  * @see https://github.com/googlecodelabs/ar-with-webxr/blob/7f8b796b546996d522ecd4e22c41d54f58b40778/final/app.js
  */
 
-const MODEL_MTL_URL = '/wp-content/plugins/augmented-reality/assets/ArcticFox_Posed.mtl';
-const MODEL_SCALE = 0.1;
+const MODEL_SCALE = 0.05;
 
 /**
  * Container class to manage connecting to the WebXR Device API
@@ -162,9 +161,11 @@ class App {
     // resolves to a THREE.Group containing our mesh information.
     // Dont await this promise, as we want to start the rendering
     // process before this finishes.
-    const MODEL_OBJ_URL = document.querySelector( '#enter-ar-info' ).getAttribute( 'data-ar-url' );
+    let arElement = document.querySelector( '#enter-ar-info' );
+    const modelObjUrl = arElement.getAttribute( 'data-obj-url' );
+    let modelMtlUrl = arElement.getAttribute( 'data-mtl-url' );
 
-    DemoUtils.loadModel(MODEL_OBJ_URL, MODEL_MTL_URL).then(model => {
+    DemoUtils.loadModel(modelObjUrl, modelMtlUrl).then(model => {
       this.model = model;
 
       // Some models contain multiple meshes, so we want to make sure

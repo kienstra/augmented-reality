@@ -29,6 +29,20 @@ class Block {
 	const OBJ_FILE_TYPE = 'application/obj';
 
 	/**
+	 * The file type of .mtl files.
+	 *
+	 * @var string
+	 */
+	const MTL_FILE_TYPE = 'application/mtl';
+
+	/**
+	 * The file type of .gbl files.
+	 *
+	 * @var string
+	 */
+	const GBL_FILE_TYPE = 'application/glb';
+
+	/**
 	 * Block constructor.
 	 *
 	 * @param Plugin $plugin The instance of the plugin.
@@ -59,7 +73,7 @@ class Block {
 	}
 
 	/**
-	 * Allow '.obj' files, as they normally are not allowed.
+	 * Allow .obj and .mtl files, as they normally are not allowed.
 	 *
 	 * @param array $wp_check_filetype_and_ext[] {
 	 *     The file data.
@@ -73,7 +87,15 @@ class Block {
 	 * @return array $wp_check_filetype_and_ext The filtered file data.
 	 */
 	public function check_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filename ) {
-		if ( ! preg_match( '/\.obj$/', $filename ) || ! extension_loaded( 'fileinfo' ) ) {
+		$ob_match      = preg_match( '/\.obj$/', $filename );
+		$mtl_match     = preg_match( '/\.mtl$/', $filename );
+		$do_allow_file = (
+			( $ob_match || $mtl_match )
+			&&
+			extension_loaded( 'fileinfo' )
+		);
+
+		if ( ! $do_allow_file ) {
 			return $wp_check_filetype_and_ext;
 		}
 
@@ -83,8 +105,13 @@ class Block {
 
 		// .obj files can have a $real_mime of 'text/plain', so allow that tile type.
 		if ( 'text/plain' === $real_mime ) {
-			$wp_check_filetype_and_ext['ext']  = 'obj';
-			$wp_check_filetype_and_ext['type'] = self::OBJ_FILE_TYPE;
+			if ( $ob_match ) {
+				$wp_check_filetype_and_ext['ext']  = 'obj';
+				$wp_check_filetype_and_ext['type'] = self::OBJ_FILE_TYPE;
+			} elseif ( $mtl_match ) {
+				$wp_check_filetype_and_ext['ext']  = 'mtl';
+				$wp_check_filetype_and_ext['type'] = self::MTL_FILE_TYPE;
+			}
 		}
 
 		return $wp_check_filetype_and_ext;
@@ -98,7 +125,8 @@ class Block {
 	 */
 	public function add_mime_types( $mimes ) {
 		$mimes['obj'] = self::OBJ_FILE_TYPE;
-		$mimes['glb'] = 'application/glb';
+		$mimes['mtl'] = self::MTL_FILE_TYPE;
+		$mimes['glb'] = self::GBL_FILE_TYPE;
 		return $mimes;
 	}
 }

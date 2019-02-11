@@ -120,5 +120,18 @@ class Test_Block extends \WP_UnitTestCase {
 			),
 			$this->instance->check_filetype_and_ext( $initial_wp_check_filetype_and_ext, $file, $correct_filename )
 		);
+
+		$mtl_filename = 'baz.mtl';
+		$file         = dirname( __DIR__ ) . '/fixtures/' . $mtl_filename;
+
+		// This now passes an .obj file, so the filtered value should be different.
+		$this->assertEquals(
+			array(
+				'ext'             => 'mtl',
+				'type'            => 'application/mtl',
+				'proper_filename' => false,
+			),
+			$this->instance->check_filetype_and_ext( $initial_wp_check_filetype_and_ext, $file, $mtl_filename )
+		);
 	}
 }
