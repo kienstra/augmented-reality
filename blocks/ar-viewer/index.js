@@ -7,10 +7,11 @@ const {
 } = wp.blocks;
 const {
 	Editable,
-	MediaUpload,
+	MediaUpload
 } = wp.editor;
 const {
 	Button,
+	Placeholder
 } = wp.components;
 
 /**
@@ -31,21 +32,38 @@ export default registerBlockType(
 			objUrl: {
 				type: 'string',
 				source: 'attribute',
-				attribute: 'data-ar-url',
+				attribute: 'data-obj-url',
 				selector: '#enter-ar-info',
 			},
 			objId: {
 				type: 'number',
+			},
+			mtlUrl: {
+				type: 'string',
+				source: 'attribute',
+				attribute: 'data-mtl-url',
+				selector: '#enter-ar-info',
+			},
+			mtlId: {
+				type: 'number',
 			}
 		},
+
 		edit: props => {
 			const { attributes: { objId, objUrl, mtlId, mtlUrl },
-				className, setAttributes, isSelected } = props;
+				className, isSelected, noticeUI, setAttributes } = props;
 
 			return (
 				<div className={ className }>
-
-					{ ! objId ? (
+				<Placeholder
+					children={ 'this' }
+					label={ __( 'Augmented Reality Viewer', 'augmented-reality' ) }
+					instructions={ __( 'Please select both files', 'augmented-reality' ) }
+					icon={ 'gallery' }
+					className={ 'foo' }
+					notices={ noticeUI }
+				>
+					{ ! objUrl ? (
 
 						<MediaUpload
 							onSelect={ img => {
@@ -61,7 +79,7 @@ export default registerBlockType(
 									className={ "button button-large" }
 									onClick={ open }
 								>
-									{ __( 'Upload Image', 'augmented-reality' ) }
+									{ __( 'Upload .obj file', 'augmented-reality' ) }
 								</Button>
 							) }
 						>
@@ -69,16 +87,13 @@ export default registerBlockType(
 
 					) : (
 
-						<p class="image-wrapper">
-							{ __( 'Augmented Reality .obj file', 'augmented-reality' ) }
-							<img
-								src={ objUrl }
-							/>
+						<div class="image-wrapper">
+							<span>{ objUrl.match( /[^\/]+\.obj+$/ ) ? objUrl.match( /[^\/]+\.obj+$/ )[0] : null }</span>
 
-							{ isSelected ? (
+							{ !! objUrl ? (
 
 								<Button
-									className="remove-image"
+									className="button button-large"
 									onClick={ () => {
 										setAttributes({
 											objId: null,
@@ -86,14 +101,15 @@ export default registerBlockType(
 										} );
 									} }
 								>
+									{ __( 'Remove file', 'augmented-reality' ) }
 								</Button>
 
 							) : null }
 
-						</p>
+						</div>
 					) }
 
-					{ ! mtlId ? (
+					{ ! mtlUrl ? (
 
 						<MediaUpload
 							onSelect={ img => {
@@ -106,10 +122,10 @@ export default registerBlockType(
 							value={ mtlId }
 							render={ ( { open } ) => (
 								<Button
-									className={ "button button-large" }
+									className="button button-large"
 									onClick={ open }
 								>
-									{ __( 'Upload Image', 'augmented-reality' ) }
+									{ __( 'Upload .mtl file', 'augmented-reality' ) }
 								</Button>
 							) }
 						>
@@ -117,16 +133,13 @@ export default registerBlockType(
 
 					) : (
 
-						<p class="image-wrapper">
-							{ __( '.mtl file', 'augmented-reality' ) }
-							<img
-								src={ mtlUrl }
-							/>
+						<div class="image-wrapper">
+							<span>{ mtlUrl.match( /[^\/]+\.mtl+$/ ) ? mtlUrl.match( /[^\/]+\.mtl+$/ )[0] : null }</span>
 
-							{ isSelected ? (
+							{ !! mtlUrl ? (
 
 								<Button
-									className="remove-image"
+									className="button button-large"
 									onClick={ () => {
 										setAttributes({
 											mtlId: null,
@@ -134,15 +147,19 @@ export default registerBlockType(
 										} );
 									} }
 								>
+									{ __( 'Remove file', 'augmented-reality' ) }
 								</Button>
 
 							) : null }
 
-						</p>
+						</div>
 					) }
+				</Placeholder>
 				</div>
-			);
+
+			)
 		},
+
 		save: props => {
 			const { objUrl, mtlUrl } = props.attributes;
 			return (
