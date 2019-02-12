@@ -10,7 +10,6 @@
             "email": "kienstraryan@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
         "php": "^5.3.6 || ^7.0"
     },
