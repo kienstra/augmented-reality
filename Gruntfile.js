@@ -87,7 +87,9 @@ module.exports = function( grunt ) {
 				return ! /^(blocks|\.|bin|([^/]+)+\.(md|json|xml)|Gruntfile\.js|tests|wp-assets|dev-lib|readme\.md|composer\..*|webpack.*|languages\/README.*)/.test( file );
 			} );
 			paths.push( 'vendor/autoload.php' );
+			paths.push( 'assets/js/*-compiled.js' );
 			paths.push( 'vendor/composer/**' );
+			paths.push( 'assets/vendor/**' );
 
 			grunt.task.run( 'clean' );
 			grunt.config.set( 'copy', {
