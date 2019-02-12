@@ -37,7 +37,7 @@ module.exports = function( grunt ) {
 				command: 'cross-env BABEL_ENV=production webpack'
 			},
 			create_build_zip: {
-				command: 'if [ ! -e build ]; then echo "Run grunt build first."; exit 1; fi; if [ -e cabopress-amp.zip ]; then rm cabopress-amp.zip; fi; cd build; zip -r ../cabopress-amp.zip .; cd ..; echo; echo "ZIP of build: $(pwd)/cabopress-amp.zip"'
+				command: 'if [ ! -e build ]; then echo "Run grunt build first."; exit 1; fi; if [ -e augmented-reality.zip ]; then rm augmented-reality.zip; fi; cd build; zip -r ../augmented-reality.zip .; cd ..; echo; echo "ZIP of build: $(pwd)/augmented-reality.zip"'
 			}
 		},
 

@@ -12,7 +12,7 @@ Adds blocks for augmented reality experiences.
 **Donate link:** http://jdrf.org/get-involved/ways-to-donate/  
 **Requires PHP:** 7.1  
 
-[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) 
+[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
 
 ## Description ##
 
