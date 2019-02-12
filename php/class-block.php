@@ -174,14 +174,14 @@ class Block {
 		ob_start();
 		?>
 		<div>
-			<div id="enter-ar-info" class="demo-card mdl-card mdl-shadow--4dp" data-obj-url="<?php echo esc_url( $attributes['objUrl'] ); ?>" data-mtl-url="<?php echo esc_url( $attributes['mtlUrl'] ); ?>">
+			<div>
 				<div class="mdl-card__actions mdl-card--border">
-					<a id="enter-ar" class="mdl-button mdl-button--raised mdl-button--accent">
+					<a class="enter-ar" data-obj-url="<?php echo esc_url( $attributes['objUrl'] ); ?>" data-mtl-url="<?php echo esc_url( $attributes['mtlUrl'] ); ?>">
 						<?php esc_html_e( 'Start augmented reality', 'augmented-reality' ); ?>
 					</a>
 				</div>
 			</div>
-			<div id="unsupported-info" style="display:none" class="demo-card mdl-card mdl-shadow--4dp">
+			<div class="unsupported-info" style="display:none">
 				<div class="mdl-card__title">
 					<h2 class="mdl-card__title-text"><?php esc_html_e( 'Unsupported Browser', 'augmented-reality' ); ?></h2>
 				</div>
