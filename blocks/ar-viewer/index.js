@@ -2,23 +2,20 @@
  * General block libraries.
  */
 const { __ } = wp.i18n;
-const {
-	registerBlockType,
-} = wp.blocks;
-const {
-	Editable,
-	MediaUpload
-} = wp.editor;
+const { registerBlockType } = wp.blocks;
+const { MediaUpload } = wp.editor;
 const {
 	Button,
 	Placeholder
 } = wp.components;
 
+const arViewerBlock = 'augmented-reality/ar-viewer';
+
 /**
- * Register AR Viewer block.
+ * Registers the AR Viewer block.
  */
 export default registerBlockType(
-	'augmented-reality/ar-viewer',
+	arViewerBlock,
 	{
 		title: __( 'AR Viewer', 'augmented-reality' ),
 		description: __( 'Place a virtual item in your location', 'augmented-reality'),
@@ -135,8 +132,12 @@ export default registerBlockType(
 			)
 		},
 
+		/**
+		 * Renders in PHP.
+		 *
+		 * @see Block::render_block().
+		 */
 		save: props => {
-			// Renders in PHP.
 			return null;
 		},
 	},
