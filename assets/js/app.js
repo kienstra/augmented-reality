@@ -91,7 +91,8 @@ class App {
       //document.body.appendChild(outputCanvas);
       let arCanvas = document.querySelector( '#ar-canvas' );
       arCanvas.appendChild( outputCanvas );
-      this.onSessionStarted(session)
+      this.onSessionStarted(session);
+      this.enterArLink.setAttribute('style', 'display:none');
     } catch (e) {
       // If `requestSession` fails, the canvas is not added, and we
       // call our function for unsupported browsers.
