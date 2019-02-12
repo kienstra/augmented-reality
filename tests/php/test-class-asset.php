@@ -47,7 +47,8 @@ class Test_Asset extends \WP_UnitTestCase {
 	 */
 	public function test_init() {
 		$this->instance->init();
-		$this->assertEquals( 10, has_action( 'enqueue_block_assets', array( $this->instance, 'ar_viewer_assets' ) ) );
+		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->instance, 'ar_viewer_assets' ) ) );
+		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', array( $this->instance, 'block_editor_styles' ) ) );
 	}
 
 	/**
@@ -65,15 +66,13 @@ class Test_Asset extends \WP_UnitTestCase {
 
 			$this->assertEquals(
 				array_map(
-					function( $dependency_slug ) {
-						return Plugin::SLUG . '-' . $dependency_slug;
-					},
+					array( $this->instance, 'get_full_slug' ),
 					$dependencies
 				),
 				$script->deps
 			);
 			$this->assertEquals( $handle, $script->handle );
-			$this->assertContains( Plugin::SLUG . '/assets/js/' . $slug . '.js', $script->src );
+			$this->assertContains( Plugin::SLUG . '/assets/js/vendor/' . $slug . '.js', $script->src );
 			$this->assertEquals( Plugin::VERSION, $script->ver );
 
 			// Ensure the localized data for utils.js is correct.
@@ -89,5 +88,37 @@ class Test_Asset extends \WP_UnitTestCase {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Test get_full_slug().
+	 *
+	 * @covers Asset::get_full_slug().
+	 */
+	public function test_get_full_slug() {
+		$first_slug  = 'foo';
+		$second_slug = 'baz';
+		$this->assertEquals( Plugin::SLUG . '-' . $first_slug, $this->instance->get_full_slug( $first_slug ) );
+		$this->assertEquals( Plugin::SLUG . '-' . $second_slug, $this->instance->get_full_slug( $second_slug ) );
+	}
+
+	/**
+	 * Test block_editor_styles().
+	 *
+	 * @covers Asset::block_editor_styles().
+	 */
+	public function test_block_editor_styles() {
+		$expected_slug = Plugin::SLUG . '-' . Asset::EDITOR_STYLES_SLUG;
+		$this->instance->block_editor_styles();
+		$styles = wp_styles();
+		$this->assertTrue( in_array( $expected_slug, $styles->queue, true ) );
+
+		$stylesheet = $styles->registered[ $expected_slug ];
+		$this->assertEquals( 'all', $stylesheet->args );
+		$this->assertEquals( array(), $stylesheet->deps );
+		$this->assertEquals( array(), $stylesheet->extra );
+		$this->assertEquals( $expected_slug, $stylesheet->handle );
+		$this->assertEquals( $this->instance->plugin->plugin_url . '/assets/css/' . Asset::EDITOR_STYLES_SLUG . '.css', $stylesheet->src );
+		$this->assertEquals( Plugin::VERSION, $stylesheet->ver );
 	}
 }

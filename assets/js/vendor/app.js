@@ -61,20 +61,24 @@ class App {
     // We found an XRDevice! Bind a click listener on our "Enter AR" button
     // since the spec requires calling `device.requestSession()` within a
     // user gesture.
-    this.enterArLink = document.querySelector('#enter-ar');
-    this.enterArLink.addEventListener('click', this.onEnterAR);
+    this.enterArLink = document.querySelectorAll('.enter-ar');
+    this.enterArLink.forEach( function( element ) {
+        element.addEventListener('click', this.onEnterAR);
+    }.bind( this ) );
   }
 
   /**
    * Handle a click event on the '#enter-ar' button and attempt to
    * start an XRSession.
    */
-  async onEnterAR() {
+  async onEnterAR(event) {
     // Now that we have an XRDevice, and are responding to a user
     // gesture, we must create an XRPresentationContext on a
     // canvas element.
     const outputCanvas = document.createElement('canvas');
     const ctx = outputCanvas.getContext('xrpresent');
+    this.modelObjUrl = event.target.getAttribute( 'data-obj-url' );
+    this.modelMtlUrl = event.target.getAttribute( 'data-mtl-url' );
 
     try {
       // Request a session for the XRDevice with the XRPresentationContext
@@ -91,7 +95,8 @@ class App {
       //document.body.appendChild(outputCanvas);
       let arCanvas = document.querySelector( '#ar-canvas' );
       arCanvas.appendChild( outputCanvas );
-      this.onSessionStarted(session)
+      this.onSessionStarted(session);
+      event.target.setAttribute('style', 'display:none');
     } catch (e) {
       // If `requestSession` fails, the canvas is not added, and we
       // call our function for unsupported browsers.
@@ -100,15 +105,15 @@ class App {
   }
 
   /**
-   * Toggle on a class on the page to disable the "Enter AR"
-   * button and display the unsupported browser message.
+   * Display the unsupported browser message.
    */
   onNoXRDevice() {
-    let unsupportedInfo = document.querySelector( '#unsupported-info' );
+    let unsupportedInfo = document.querySelectorAll( '.unsupported-info' );
     if ( unsupportedInfo ) {
-        unsupportedInfo.setAttribute( 'style', '' ); // Remove the style: none inline styling.
+        unsupportedInfo.forEach( function( element ) {
+            element.setAttribute( 'style', '' ); // Removes the style: none inline styling.
+        } );
     }
-    document.body.classList.add('unsupported');
   }
 
   /**
@@ -161,11 +166,7 @@ class App {
     // resolves to a THREE.Group containing our mesh information.
     // Dont await this promise, as we want to start the rendering
     // process before this finishes.
-    let arElement = document.querySelector( '#enter-ar-info' );
-    const modelObjUrl = arElement.getAttribute( 'data-obj-url' );
-    let modelMtlUrl = arElement.getAttribute( 'data-mtl-url' );
-
-    DemoUtils.loadModel(modelObjUrl, modelMtlUrl).then(model => {
+    DemoUtils.loadModel(this.modelObjUrl, this.modelMtlUrl).then(model => {
       this.model = model;
 
       // Some models contain multiple meshes, so we want to make sure

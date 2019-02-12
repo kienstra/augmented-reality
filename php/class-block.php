@@ -15,6 +15,13 @@ namespace AugmentedReality;
 class Block {
 
 	/**
+	 * The name of the block.
+	 *
+	 * @var string
+	 */
+	const BLOCK_NAME = 'augmented-reality/ar-viewer';
+
+	/**
 	 * The slug of the JS file.
 	 *
 	 * @var string
@@ -58,6 +65,7 @@ class Block {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
 		add_action( 'mime_types', array( $this, 'add_mime_types' ) );
 		add_action( 'wp_check_filetype_and_ext', array( $this, 'check_filetype_and_ext' ), 10, 3 );
+		add_action( 'init', array( $this, 'register_block' ) );
 	}
 
 	/**
@@ -128,5 +136,65 @@ class Block {
 		$mimes['mtl'] = self::MTL_FILE_TYPE;
 		$mimes['glb'] = self::GBL_FILE_TYPE;
 		return $mimes;
+	}
+
+	/**
+	 * Registers the block.
+	 */
+	public function register_block() {
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type(
+				self::BLOCK_NAME,
+				array(
+					'attributes'      => array(
+						'objUrl' => array(
+							'type' => 'string',
+						),
+						'mtlUrl' => array(
+							'type' => 'string',
+						),
+					),
+					'render_callback' => array( $this, 'render_block' ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Renders the block.
+	 *
+	 * @param array $attributes The block attributes.
+	 * @return string $markup The markup of the block.
+	 */
+	public function render_block( $attributes ) {
+		if ( ! isset( $attributes['objUrl'], $attributes['mtlUrl'] ) ) {
+			return;
+		}
+
+		ob_start();
+		?>
+		<div>
+			<div>
+				<div class="mdl-card__actions mdl-card--border">
+					<a class="enter-ar" data-obj-url="<?php echo esc_url( $attributes['objUrl'] ); ?>" data-mtl-url="<?php echo esc_url( $attributes['mtlUrl'] ); ?>">
+						<?php esc_html_e( 'Start augmented reality', 'augmented-reality' ); ?>
+					</a>
+				</div>
+			</div>
+			<div class="unsupported-info" style="display:none">
+				<div class="mdl-card__title">
+					<h2 class="mdl-card__title-text"><?php esc_html_e( 'Unsupported Browser', 'augmented-reality' ); ?></h2>
+				</div>
+				<div class="mdl-card__supporting-text">
+					<?php esc_html_e( 'Your browser does not support AR features with WebXR.', 'augmented-reality' ); ?>
+				</div>
+			</div>
+			<div id="stabilization"></div>
+			<div id="ar-canvas"></div>
+		</div>
+
+		<?php
+		wp_print_scripts( $this->plugin->components->Asset->get_full_slug( 'app' ) );
+		return ob_get_clean();
 	}
 }
