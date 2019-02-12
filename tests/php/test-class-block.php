@@ -130,40 +130,32 @@ class Test_Block extends \WP_UnitTestCase {
 		$mtl_url = 'https://example.com/baz.mtl';
 
 		// If the $attributes argument is an empty array(), this should not output anything.
-		ob_start();
-		$this->instance->render_block( array() );
-		$this->assertEmpty( ob_get_clean() );
+		$this->assertEmpty( $this->instance->render_block( array() ) );
 
 		// If the $attributes argument only has an 'mtlUrl' value, this should not output anything.
-		ob_start();
-		$this->instance->render_block( array( 'mtlUrl' => $mtl_url ) );
-		$this->assertEmpty( ob_get_clean() );
+		$this->assertEmpty( $this->instance->render_block( array( 'mtlUrl' => $mtl_url ) ) );
 
 		// Now that both the 'objUrl' and 'mtlUrl' are present, this should render the block.
 		$correct_args = array(
 			'objUrl' => $obj_url,
 			'mtlUrl' => $mtl_url,
 		);
-		ob_start();
-		$this->instance->render_block( $correct_args );
-		$output = ob_get_clean();
+		$markup       = $this->instance->render_block( $correct_args );
 
-		$this->assertContains( $obj_url, $output );
-		$this->assertContains( $mtl_url, $output );
-		$this->assertContains( '<div id="enter-ar-info"', $output );
-		$this->assertContains( 'Your browser does not support AR features with WebXR.', $output );
+		$this->assertContains( $obj_url, $markup );
+		$this->assertContains( $mtl_url, $markup );
+		$this->assertContains( '<div id="enter-ar-info"', $markup );
+		$this->assertContains( 'Your browser does not support AR features with WebXR.', $markup );
 
 		// wp_print_scripts() is called at the bottom of the method, and should print the enqueued scripts.
 		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
-			$this->assertContains( $slug, $output );
+			$this->assertContains( $slug, $markup );
 		}
 
 		// Now that the render function is called once, calling it again shouldn't invoke wp_print_scripts() again.
-		ob_start();
-		$this->instance->render_block( $correct_args );
-		$output = ob_get_clean();
+		$markup = $this->instance->render_block( $correct_args );
 		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
-			$this->assertNotContains( $slug, $output );
+			$this->assertNotContains( $slug, $markup );
 		}
 	}
 

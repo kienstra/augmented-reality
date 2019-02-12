@@ -18,7 +18,7 @@ const {
  * Register AR Viewer block.
  */
 export default registerBlockType(
-	'augment-reality/ar-viewer',
+	'augmented-reality/ar-viewer',
 	{
 		title: __( 'AR Viewer', 'augmented-reality' ),
 		description: __( 'Place a virtual item in your location', 'augmented-reality'),
@@ -136,6 +136,7 @@ export default registerBlockType(
 		},
 
 		save: props => {
+			// Renders in PHP.
 			return null;
 		},
 	},

@@ -19,7 +19,7 @@ class Block {
 	 *
 	 * @var string
 	 */
-	const BLOCK_NAME = 'augment-reality/ar-viewer';
+	const BLOCK_NAME = 'augmented-reality/ar-viewer';
 
 	/**
 	 * The slug of the JS file.
@@ -164,12 +164,14 @@ class Block {
 	 * Renders the block.
 	 *
 	 * @param array $attributes The block attributes.
+	 * @return string $markup The markup of the block.
 	 */
 	public function render_block( $attributes ) {
 		if ( ! isset( $attributes['objUrl'], $attributes['mtlUrl'] ) ) {
 			return;
 		}
 
+		ob_start();
 		?>
 		<div>
 			<div id="enter-ar-info" class="demo-card mdl-card mdl-shadow--4dp" data-obj-url="<?php echo esc_url( $attributes['objUrl'] ); ?>" data-mtl-url="<?php echo esc_url( $attributes['mtlUrl'] ); ?>">
@@ -193,5 +195,6 @@ class Block {
 
 		<?php
 		wp_print_scripts( $this->plugin->components->Asset->get_full_slug( 'app' ) );
+		return ob_get_clean();
 	}
 }
