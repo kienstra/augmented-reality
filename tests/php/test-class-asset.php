@@ -91,6 +91,18 @@ class Test_Asset extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Test get_full_slug().
+	 *
+	 * @covers Asset::get_full_slug().
+	 */
+	public function test_get_full_slug() {
+		$first_slug  = 'foo';
+		$second_slug = 'baz';
+		$this->assertEquals( Plugin::SLUG . '-' . $first_slug, $this->instance->get_full_slug( $first_slug ) );
+		$this->assertEquals( Plugin::SLUG . '-' . $second_slug, $this->instance->get_full_slug( $second_slug ) );
+	}
+
+	/**
 	 * Test block_editor_styles().
 	 *
 	 * @covers Asset::block_editor_styles().
