@@ -10,7 +10,9 @@ Adds blocks for augmented reality experiences.
 **Stable tag:** 0.1.0  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Donate link:** http://jdrf.org/get-involved/ways-to-donate/  
-**Requires PHP:** 5.3  
+**Requires PHP:** 5.6  
+
+[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) 
 
 ## Description ##
 
