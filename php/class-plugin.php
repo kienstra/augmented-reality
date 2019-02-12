@@ -20,6 +20,7 @@ class Plugin {
 	 * @var string
 	 */
 	const VERSION = '0.1.0';
+
 	/**
 	 * The slug of the plugin.
 	 *

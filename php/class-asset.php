@@ -71,7 +71,7 @@ class Asset {
 		foreach ( $this->js_files as $slug => $dependencies ) {
 			wp_register_script(
 				Plugin::SLUG . '-' . $slug,
-				$this->plugin->plugin_url . '/assets/js/' . $slug . '.js',
+				$this->plugin->plugin_url . '/assets/js/vendor/' . $slug . '.js',
 				array_map(
 					array( $this, 'get_full_slug' ),
 					$dependencies

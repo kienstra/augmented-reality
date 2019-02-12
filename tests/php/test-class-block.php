@@ -144,7 +144,7 @@ class Test_Block extends \WP_UnitTestCase {
 
 		$this->assertContains( $obj_url, $markup );
 		$this->assertContains( $mtl_url, $markup );
-		$this->assertContains( '<div id="enter-ar-info"', $markup );
+		$this->assertContains( '<a class="enter-ar"', $markup );
 		$this->assertContains( 'Your browser does not support AR features with WebXR.', $markup );
 
 		// wp_print_scripts() is called at the bottom of the method, and should print the enqueued scripts.

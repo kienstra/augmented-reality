@@ -66,15 +66,13 @@ class Test_Asset extends \WP_UnitTestCase {
 
 			$this->assertEquals(
 				array_map(
-					function( $dependency_slug ) {
-						return Plugin::SLUG . '-' . $dependency_slug;
-					},
+					array( $this->instance, 'get_full_slug' ),
 					$dependencies
 				),
 				$script->deps
 			);
 			$this->assertEquals( $handle, $script->handle );
-			$this->assertContains( Plugin::SLUG . '/assets/js/' . $slug . '.js', $script->src );
+			$this->assertContains( Plugin::SLUG . '/assets/js/vendor/' . $slug . '.js', $script->src );
 			$this->assertEquals( Plugin::VERSION, $script->ver );
 
 			// Ensure the localized data for utils.js is correct.
