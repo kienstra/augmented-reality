@@ -111,7 +111,7 @@ class Block {
 		$real_mime = finfo_file( $finfo, $file );
 		finfo_close( $finfo );
 
-		// .obj files can have a $real_mime of 'text/plain', so allow that tile type.
+		// .obj and .mtl files can have a $real_mime of 'text/plain', so allow that tile type.
 		if ( 'text/plain' === $real_mime ) {
 			if ( $ob_match ) {
 				$wp_check_filetype_and_ext['ext']  = 'obj';
@@ -126,7 +126,7 @@ class Block {
 	}
 
 	/**
-	 * Adds 'obj' and 'glb' meme types.
+	 * Adds .obj, .mtl, and 'glb' mime types.
 	 *
 	 * @param array $mimes The meme types.
 	 * @return array $mimes The filtered meme types.
@@ -139,7 +139,7 @@ class Block {
 	}
 
 	/**
-	 * Registers the block.
+	 * Registers the block as a dynamic block, with a render_callback.
 	 */
 	public function register_block() {
 		if ( function_exists( 'register_block_type' ) ) {
@@ -161,7 +161,7 @@ class Block {
 	}
 
 	/**
-	 * Renders the block.
+	 * Gets the markup of the dynamic 'AR Viewer' block, including its scripts.
 	 *
 	 * @param array $attributes The block attributes.
 	 * @return string $markup The markup of the block.
