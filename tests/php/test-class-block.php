@@ -140,13 +140,12 @@ class Test_Block extends \WP_UnitTestCase {
 		$this->assertEmpty( ob_get_clean() );
 
 		// Now that both the 'objUrl' and 'mtlUrl' are present, this should render the block.
-		ob_start();
-		$this->instance->render_block(
-			array(
-				'objUrl' => $obj_url,
-				'mtlUrl' => $mtl_url,
-			)
+		$correct_args = array(
+			'objUrl' => $obj_url,
+			'mtlUrl' => $mtl_url,
 		);
+		ob_start();
+		$this->instance->render_block( $correct_args );
 		$output = ob_get_clean();
 
 		$this->assertContains( $obj_url, $output );
@@ -157,6 +156,14 @@ class Test_Block extends \WP_UnitTestCase {
 		// wp_print_scripts() is called at the bottom of the method, and should print the enqueued scripts.
 		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
 			$this->assertContains( $slug, $output );
+		}
+
+		// Now that the render function is called once, calling it again shouldn't invoke wp_print_scripts() again.
+		ob_start();
+		$this->instance->render_block( $correct_args );
+		$output = ob_get_clean();
+		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
+			$this->assertNotContains( $slug, $output );
 		}
 	}
 
