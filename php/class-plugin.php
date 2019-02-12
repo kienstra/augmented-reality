@@ -62,6 +62,7 @@ class Plugin {
 		$this->init_classes();
 		$this->plugin_url = plugins_url( self::SLUG );
 		add_action( 'init', array( $this, 'plugin_localization' ) );
+		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 	}
 
 	/**

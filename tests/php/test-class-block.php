@@ -7,6 +7,8 @@
 
 namespace AugmentedReality;
 
+use Brain\Monkey\Functions;
+
 /**
  * Tests for class Block.
  */
@@ -49,6 +51,7 @@ class Test_Block extends \WP_UnitTestCase {
 		$this->instance->init();
 		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', array( $this->instance, 'block_editor_assets' ) ) );
 		$this->assertEquals( 10, has_filter( 'wp_check_filetype_and_ext', array( $this->instance, 'check_filetype_and_ext' ) ) );
+		$this->assertEquals( 10, has_action( 'init', array( $this->instance, 'register_block' ) ) );
 	}
 
 	/**
@@ -86,6 +89,75 @@ class Test_Block extends \WP_UnitTestCase {
 		$this->assertEmpty( array_diff( $original_mime_types, $filtered_mimes ) );
 		$this->assertEquals( Block::OBJ_FILE_TYPE, $filtered_mimes['obj'] );
 		$this->assertEquals( 'application/glb', $filtered_mimes['glb'] );
+	}
+
+	/**
+	 * Test register_block().
+	 *
+	 * @covers Block::register_block().
+	 */
+	public function test_register_block() {
+		Functions\expect( 'register_block_type' )->once()->andReturnUsing(
+			function( $block_name, $block_args ) {
+				$this->assertEquals( Block::BLOCK_NAME, $block_name );
+				$this->assertEquals(
+					array(
+						'attributes'      => array(
+							'objUrl' => array(
+								'type' => 'string',
+							),
+							'mtlUrl' => array(
+								'type' => 'string',
+							),
+						),
+						'render_callback' => array( $this->instance, 'render_block' ),
+					),
+					$block_args
+				);
+			}
+		);
+
+		$this->instance->register_block();
+	}
+
+	/**
+	 * Test render_block().
+	 *
+	 * @covers Block::render_block().
+	 */
+	public function test_render_block() {
+		$obj_url = 'https://example.com/foo.obj';
+		$mtl_url = 'https://example.com/baz.mtl';
+
+		// If the $attributes argument is an empty array(), this should not output anything.
+		ob_start();
+		$this->instance->render_block( array() );
+		$this->assertEmpty( ob_get_clean() );
+
+		// If the $attributes argument only has an 'mtlUrl' value, this should not output anything.
+		ob_start();
+		$this->instance->render_block( array( 'mtlUrl' => $mtl_url ) );
+		$this->assertEmpty( ob_get_clean() );
+
+		// Now that both the 'objUrl' and 'mtlUrl' are present, this should render the block.
+		ob_start();
+		$this->instance->render_block(
+			array(
+				'objUrl' => $obj_url,
+				'mtlUrl' => $mtl_url,
+			)
+		);
+		$output = ob_get_clean();
+
+		$this->assertContains( $obj_url, $output );
+		$this->assertContains( $mtl_url, $output );
+		$this->assertContains( '<div id="enter-ar-info"', $output );
+		$this->assertContains( 'Your browser does not support AR features with WebXR.', $output );
+
+		// wp_print_scripts() is called at the bottom of the method, and should print the enqueued scripts.
+		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
+			$this->assertContains( $slug, $output );
+		}
 	}
 
 	/**

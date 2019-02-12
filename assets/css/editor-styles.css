@@ -1,0 +1,12 @@
+/**
+ * Block editor stylesheet
+ */
+.wp-block-augment-reality-blocks-ar-viewer .ar-viewer-wrapper {
+	margin-bottom: 1rem;
+	width: 100%;
+}
+
+.wp-block-augment-reality-blocks-ar-viewer .ar-viewer-wrapper span {
+	margin-right: 1rem;
+	vertical-align: bottom;
+}
