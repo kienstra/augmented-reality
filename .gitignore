@@ -1,4 +1,5 @@
 vendor
 node_modules
 build
-cabopress-amp.zip
+augmented-reality.zip
+**/*-compiled.js
