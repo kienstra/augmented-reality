@@ -194,7 +194,7 @@ class Block {
 		</div>
 
 		<?php
-		wp_print_scripts( $this->plugin->components->Asset->get_full_slug( 'app' ) );
+		wp_enqueue_script( $this->plugin->components->Asset->get_full_slug( 'app' ) );
 		return ob_get_clean();
 	}
 }

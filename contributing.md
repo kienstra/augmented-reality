@@ -13,12 +13,12 @@ Then, `cd` to the `augmented-reality/` directory and run `composer install` and 
 If you add a new class while developing, run `composer dump-autoload -o` in order to add the class to the composer autoloader. Also, add the class name to `Plugin::$classes` so that it's instantiated:
 
 ```php
-	/**
-	 * This plugin's PHP classes.
-	 *
-	 * @var array
-	 */
-	public $classes = array( 'Asset', 'Block' );
+/**
+ * This plugin's PHP classes.
+ *
+ * @var array
+ */
+public $classes = array( 'Asset', 'Block' );
 ```
 
 ## PHPUnit Testing

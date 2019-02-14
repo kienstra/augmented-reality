@@ -147,16 +147,8 @@ class Test_Block extends \WP_UnitTestCase {
 		$this->assertContains( '<a class="enter-ar"', $markup );
 		$this->assertContains( 'Your browser does not support AR features with WebXR.', $markup );
 
-		// wp_print_scripts() is called at the bottom of the method, and should print the enqueued scripts.
-		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
-			$this->assertContains( $slug, $markup );
-		}
-
-		// Now that the render function is called once, calling it again shouldn't invoke wp_print_scripts() again.
-		$markup = $this->instance->render_block( $correct_args );
-		foreach ( $this->instance->plugin->components->Asset->js_files as $slug => $dependencies ) {
-			$this->assertNotContains( $slug, $markup );
-		}
+		$scripts = wp_scripts();
+		$this->assertTrue( in_array( $this->instance->plugin->components->Asset->get_full_slug( 'app' ), $scripts->queue, true ) );
 	}
 
 	/**

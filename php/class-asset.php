@@ -70,19 +70,19 @@ class Asset {
 	public function ar_viewer_assets() {
 		foreach ( $this->js_files as $slug => $dependencies ) {
 			wp_register_script(
-				Plugin::SLUG . '-' . $slug,
+				$this->get_full_slug( $slug ),
 				$this->plugin->plugin_url . '/assets/vendor/' . $slug . '.js',
 				array_map(
 					array( $this, 'get_full_slug' ),
 					$dependencies
 				),
 				Plugin::VERSION,
-				false
+				true
 			);
 		}
 
 		wp_localize_script(
-			Plugin::SLUG . '-utils',
+			$this->get_full_slug( 'utils' ),
 			self::LOCALIZED_DATA_NAME,
 			array(
 				'anchorUrl' => $this->plugin->plugin_url . '/assets/Anchor.png'
@@ -106,7 +106,7 @@ class Asset {
 	 */
 	public function block_editor_styles() {
 		wp_enqueue_style(
-			Plugin::SLUG . '-' . self::EDITOR_STYLES_SLUG,
+			$this->get_full_slug( self::EDITOR_STYLES_SLUG ),
 			$this->plugin->plugin_url . '/assets/css/' . self::EDITOR_STYLES_SLUG . '.css',
 			array(),
 			Plugin::VERSION
