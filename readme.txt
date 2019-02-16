@@ -5,7 +5,7 @@ Tags: blocks, augmented-reality
 Requires at least: 4.9
 Tested up to: 5.0
 Stable tag: 0.1.0
-License: GPLv2 or later
+License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.1
 
@@ -15,7 +15,7 @@ Adds blocks for augmented reality experiences.
 
 See augmented reality in WordPress.
 
-This is experimental, and only works on Android 8 (Oreo) with earlier versions of Chrome Dev or Canary (70-72). Using older browsers is probably only good on a testing device, not on your normal phone.
+This is experimental, and only works on Android 8 (Oreo) with earlier versions of Chrome Dev or Canary (70-72). Using older browsers is probably only advisable on a testing device, not your normal phone.
 
 == Installation ==
 

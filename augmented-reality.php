@@ -14,7 +14,7 @@ Description: Adds blocks for augmented reality experiences.
 Version: 0.1.0
 Author: Ryan Kienstra
 Author URI: https://ryankienstra.com
-License: GPLv2
+License: GPLv3
 */
 
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
