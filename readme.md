@@ -8,7 +8,7 @@ Adds blocks for augmented reality experiences.
 **Requires at least:** 4.9  
 **Tested up to:** 5.0  
 **Stable tag:** 0.1.0  
-**License:** [GPLv3 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
+**License:** [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)  
 **Donate link:** http://jdrf.org/get-involved/ways-to-donate/  
 **Requires PHP:** 7.1  
 
