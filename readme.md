@@ -8,15 +8,17 @@ Adds blocks for augmented reality experiences.
 **Requires at least:** 4.9  
 **Tested up to:** 5.0  
 **Stable tag:** 0.1.0  
-**License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
+**License:** [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)  
 **Donate link:** http://jdrf.org/get-involved/ways-to-donate/  
 **Requires PHP:** 7.1  
 
-[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) 
+[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
 
 ## Description ##
 
 See augmented reality in WordPress.
+
+This is experimental, and only works on Android 8 (Oreo) with earlier versions of Chrome Dev or Canary (70-72). Using older browsers is probably only advisable on a testing device, not your normal phone.
 
 ## Installation ##
 
@@ -28,5 +30,7 @@ See augmented reality in WordPress.
 
 ### 0.1.0 ###
 See the [v0.1.0 project](https://github.com/kienstra/augmented-reality/projects/1).
+
+- Add the "AR Viewer" block, enabling augmented reality on some Android phones.
 
 

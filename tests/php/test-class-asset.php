@@ -72,7 +72,7 @@ class Test_Asset extends \WP_UnitTestCase {
 				$script->deps
 			);
 			$this->assertEquals( $handle, $script->handle );
-			$this->assertContains( Plugin::SLUG . '/assets/js/vendor/' . $slug . '.js', $script->src );
+			$this->assertContains( Plugin::SLUG . '/assets/vendor/' . $slug . '.js', $script->src );
 			$this->assertEquals( Plugin::VERSION, $script->ver );
 
 			// Ensure the localized data for utils.js is correct.
