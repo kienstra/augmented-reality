@@ -15,6 +15,8 @@ Adds blocks for augmented reality experiences.
 
 See augmented reality in WordPress.
 
+This is experimental, and only works on Android 8 (Oreo) with earlier versions of Chrome Dev or Canary (70-72). Using older browsers is probably only good on a testing device, not on your normal phone.
+
 == Installation ==
 
 1. Upload the augmented-reality directory to your /wp-content/plugins directory.
@@ -26,3 +28,5 @@ See augmented reality in WordPress.
 = 0.1.0 =
 
 See the [v0.1.0 project](https://github.com/kienstra/augmented-reality/projects/1).
+
+- Add the "AR Viewer" block, enabling augmented reality on some Android phones.
