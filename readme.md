@@ -6,7 +6,7 @@ Adds blocks for augmented reality experiences.
 **Contributors:** [ryankienstra](https://profiles.wordpress.org/ryankienstra)  
 **Tags:** [blocks](https://wordpress.org/plugins/tags/blocks), [augmented-reality](https://wordpress.org/plugins/tags/augmented-reality)  
 **Requires at least:** 4.9  
-**Tested up to:** 5.0  
+**Tested up to:** 5.1  
 **Stable tag:** 0.1.0  
 **License:** [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)  
 **Donate link:** http://jdrf.org/get-involved/ways-to-donate/  
@@ -16,21 +16,38 @@ Adds blocks for augmented reality experiences.
 
 ## Description ##
 
-See augmented reality in WordPress.
+Augmented reality in WordPress.
 
-This is experimental, and only works on Android 8 (Oreo) with earlier versions of Chrome Dev or Canary (70-72). Using older browsers is probably only advisable on a testing device, not your normal phone.
+This is a [Google Codelab](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html) with a block editor (Gutenberg) back-end.
+
+It's experimental, and requires an Android device [that can run ARCore](https://developers.google.com/ar/discover/#supported_devices), and earlier versions of Chrome Dev or Canary (70-72). Using older browsers like these is only advisable on a testing device, not your normal phone.
+
+Please see the [Getting Set Up](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html#1) section of the Codelab.
+
+The files from the Google Codelab are mainly copied from its [GitHub repo](https://github.com/googlecodelabs/ar-with-webxr/tree/7f8b796b546996d522ecd4e22c41d54f58b40778), with slight changes.
+
+**Setup**
+1. Find `.obj` and `.mtl` files for a 3D object, like from [Poly](https://poly.google.com/) or [Free3D](https://free3d.com/3d-models/obj-file).
+2. In the block (Gutenberg) editor, add an "AR Viewer" block.
+3. Upload the `.obj` and `.mtl` files:
+![ar-block-demo](https://user-images.githubusercontent.com/4063887/52907716-a766e900-322c-11e9-89e9-5d6315ada4cc.gif)
+4. View the front-end of the post.
+5. Click "Start augmented reality"
+6. Rotate the screen until an anchor appears:
+![ar-viewer-reticle](https://user-images.githubusercontent.com/4063887/52907208-05da9a00-3222-11e9-87a1-68910476e1e0.gif)
+7. Click the anchor, and see the 3d object. The object below is from [Poly](https://poly.google.com/view/1HpVP5w2x1D), created by [Poly by Google](https://poly.google.com/user/4aEd8rQgKu2):
+![ar-viewer-cup](https://user-images.githubusercontent.com/4063887/52907215-391d2900-3222-11e9-8a16-74951dd5a433.gif)
 
 ## Installation ##
 
 1. Upload the augmented-reality directory to your /wp-content/plugins directory.
 1. In the "Plugins" menu, find "Augmented Reality," and click "Activate."
-1. In the block editor, add an "AR Viewer" block.
 
 ## Changelog ##
 
 ### 0.1.0 ###
 See the [v0.1.0 project](https://github.com/kienstra/augmented-reality/projects/1).
 
-- Add the "AR Viewer" block, enabling augmented reality on some Android phones.
+- Adds the "AR Viewer" block, enabling augmented reality on some Android phones.
 
 
