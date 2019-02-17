@@ -16,6 +16,9 @@ Adds blocks for augmented reality experiences.
 
 ## Description ##
 
+![demo-coffee-cup](https://user-images.githubusercontent.com/4063887/52908204-afc42180-3236-11e9-9dc7-cd52718000f9.gif)
+(Cup object created by [Poly by Google](https://poly.google.com/user/4aEd8rQgKu2))
+
 This is a [Google Codelab](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html) with a block editor (Gutenberg) back-end.
 
 It's experimental, and requires an Android device [that can run ARCore](https://developers.google.com/ar/discover/#supported_devices), and earlier versions of Chrome Dev or Canary (70-72). Using older browsers like these is only advisable on a testing device, not your normal phone.
