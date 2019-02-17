@@ -27,11 +27,11 @@ Please see the [Getting Set Up](https://codelabs.developers.google.com/codelabs/
 The files from the Google Codelab are mainly copied from its [GitHub repo](https://github.com/googlecodelabs/ar-with-webxr/tree/7f8b796b546996d522ecd4e22c41d54f58b40778), with slight changes.
 
 **Setup**
-1. Find `.obj` and `.mtl` files for a 3D object, like from [Poly](https://poly.google.com/) or [Free3D](https://free3d.com/3d-models/obj-file).
-2. In the block (Gutenberg) editor, add an "AR Viewer" block.
-3. Upload the `.obj` and `.mtl` files:
-![ar-block-demo](https://user-images.githubusercontent.com/4063887/52907863-d03cad80-322f-11e9-94f6-84e88af9ca86.gif)
-4. View the front-end of the post.
+1. Find `.obj` and `.mtl` files for a 3D object, like from [Poly](https://poly.google.com/) or [Free3D](https://free3d.com/3d-models/obj-file)
+2. In the block (Gutenberg) editor, add an "AR Viewer" block
+3. Select the `.obj` and `.mtl` files in the block UI, and click "Save Draft" or "Update":
+![ar-block-demo](https://user-images.githubusercontent.com/4063887/52907916-e5660c00-3230-11e9-9f27-b56e3b2d5607.gif)
+4. View the front-end of the post
 5. Click "Start augmented reality"
 6. Rotate the screen until an anchor appears:
 ![ar-viewer-reticle](https://user-images.githubusercontent.com/4063887/52907208-05da9a00-3222-11e9-87a1-68910476e1e0.gif)
