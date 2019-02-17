@@ -16,15 +16,11 @@ Adds blocks for augmented reality experiences.
 
 ## Description ##
 
-Augmented reality in WordPress.
-
 This is a [Google Codelab](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html) with a block editor (Gutenberg) back-end.
 
 It's experimental, and requires an Android device [that can run ARCore](https://developers.google.com/ar/discover/#supported_devices), and earlier versions of Chrome Dev or Canary (70-72). Using older browsers like these is only advisable on a testing device, not your normal phone.
 
-Please see the [Getting Set Up](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html#1) section of the Codelab.
-
-The files from the Google Codelab are mainly copied from its [GitHub repo](https://github.com/googlecodelabs/ar-with-webxr/tree/7f8b796b546996d522ecd4e22c41d54f58b40778), with slight changes.
+Please see the [Getting Set Up](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html#1) section of the Codelab. The files from the Google Codelab are mainly copied from its [GitHub repo](https://github.com/googlecodelabs/ar-with-webxr/tree/7f8b796b546996d522ecd4e22c41d54f58b40778), with slight changes.
 
 **Setup**
 1. Find `.obj` and `.mtl` files for a 3D object, like from [Poly](https://poly.google.com/) or [Free3D](https://free3d.com/3d-models/obj-file)
