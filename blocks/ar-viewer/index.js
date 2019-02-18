@@ -37,7 +37,7 @@ export default registerBlockType(
 			const { attributes: { objUrl, mtlUrl },
 				className, noticeUI, setAttributes } = props;
 
-			const getViewerWrapper = (url, fileType) => {
+			const getViewerWrapper = ( url, fileType ) => {
 				return (
 					<div className="ar-viewer-wrapper">
 						{ ! url ? (
