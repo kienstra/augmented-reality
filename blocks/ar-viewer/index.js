@@ -22,7 +22,6 @@ export default registerBlockType(
 		category: 'common',
 		icon: 'embed-generic',
 		keywords: [
-			__( 'MediaUpload', 'augmented-reality' ),
 			__( 'Augmented Reality', 'augmented-reality' ),
 		],
 		attributes: {
@@ -38,6 +37,49 @@ export default registerBlockType(
 			const { attributes: { objUrl, mtlUrl },
 				className, noticeUI, setAttributes } = props;
 
+			const getViewerWrapper = (url, fileType) => {
+				return (
+					<div className="ar-viewer-wrapper">
+						{ ! url ? (
+							<MediaUpload
+								onSelect={ img => {
+									let attributes = {};
+									attributes[ fileType + 'Url' ] = img.url;
+									setAttributes( attributes );
+								} }
+								type="image"
+								value={ url }
+								render={ ( { open } ) => (
+									<Button
+										className={ "button button-large" }
+										onClick={ open }
+									>
+										{ __( 'Select %s file', 'augmented-reality' ).replace( '%s', fileType ) } /* jshint ignore:line */
+									</Button>
+								) }
+							>
+							</MediaUpload>
+						) : (
+							<div>
+								<span>{ url.match( '[^\\/]+\\.+' + fileType + '$' ) ? url.match( '[^\\/]+\\.+' + fileType + '$' )[0] : null }</span>
+								{ !! url ? (
+									<Button
+										className="button button-large"
+										onClick={ () => {
+											let attributes = {};
+											attributes[ fileType + 'Url' ] = null;
+											setAttributes( attributes );
+										} }
+									>
+										{ __( 'Remove %s file', 'augmented-reality' ).replace( '%s', fileType ) }
+									</Button>
+								) : null }
+							</div>
+						) }
+					</div>
+				)
+			};
+
 			return (
 				<div className={ className }>
 					<Placeholder
@@ -48,85 +90,8 @@ export default registerBlockType(
 						className={ 'foo' }
 						notices={ noticeUI }
 					>
-
-						<div className="ar-viewer-wrapper">
-							{ ! objUrl ? (
-								<MediaUpload
-									onSelect={ img => {
-										setAttributes( {
-											objUrl: img.url,
-										} );
-									} }
-									type="image"
-									value={ objUrl }
-									render={ ( { open } ) => (
-										<Button
-											className={ "button button-large" }
-											onClick={ open }
-										>
-											{ __( 'Select .obj file', 'augmented-reality' ) }
-										</Button>
-									) }
-								>
-								</MediaUpload>
-							) : (
-								<div>
-									<span>{ objUrl.match( /[^\/]+\.obj+$/ ) ? objUrl.match( /[^\/]+\.obj+$/ )[0] : null }</span>
-									{ !! objUrl ? (
-										<Button
-											className="button button-large"
-											onClick={ () => {
-												setAttributes({
-													objUrl: null,
-												} );
-											} }
-										>
-											{ __( 'Remove .obj file', 'augmented-reality' ) }
-										</Button>
-									) : null }
-								</div>
-							) }
-						</div>
-
-						<div className="ar-viewer-wrapper">
-							{ ! mtlUrl ? (
-								<MediaUpload
-									onSelect={ img => {
-										setAttributes( {
-											mtlUrl: img.url,
-										} );
-									} }
-									type="image"
-									value={ mtlUrl }
-									render={ ( { open } ) => (
-										<Button
-											className="button button-large"
-											onClick={ open }
-										>
-											{ __( 'Select .mtl file', 'augmented-reality' ) }
-										</Button>
-									) }
-								>
-								</MediaUpload>
-							) : (
-								<div>
-									<span>{ mtlUrl.match( /[^\/]+\.mtl+$/ ) ? mtlUrl.match( /[^\/]+\.mtl+$/ )[0] : null }</span>
-									{ !! mtlUrl ? (
-										<Button
-											className="button button-large"
-											onClick={ () => {
-												setAttributes({
-													mtlUrl: null,
-												} );
-											} }
-										>
-											{ __( 'Remove .mtl file', 'augmented-reality' ) }
-										</Button>
-									) : null }
-								</div>
-							)
-						}
-						</div>
+						{ getViewerWrapper( objUrl, 'obj' ) }
+						{ getViewerWrapper( mtlUrl, 'mtl' ) }
 					</Placeholder>
 				</div>
 			)
@@ -137,7 +102,7 @@ export default registerBlockType(
 		 *
 		 * @see Block::render_block().
 		 */
-		save: props => {
+		save: () => {
 			return null;
 		},
 	},
