@@ -51,10 +51,10 @@ export default registerBlockType(
 								value={ url }
 								render={ ( { open } ) => (
 									<Button
-										className={ "button button-large" }
+										className={ 'button button-large' }
 										onClick={ open }
 									>
-										{ __( 'Select %s file', 'augmented-reality' ).replace( '%s', fileType ) } /* jshint ignore:line */
+										{ __( 'Select %s file', 'augmented-reality' ).replace( '%s', fileType ) }
 									</Button>
 								) }
 							>
