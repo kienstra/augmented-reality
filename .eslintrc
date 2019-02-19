@@ -1,12 +1,20 @@
 {
 	"env": {
-		"browser": true
+		"browser": true,
+		"es6": true,
 	},
 	"globals": {
 		"_": false,
 		"Backbone": false,
 		"jQuery": false,
 		"wp": false
+	},
+	"parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
 	},
 	"rules": {
 		"accessor-pairs": [2],
@@ -123,7 +131,7 @@
 		"no-unneeded-ternary": [2],
 		"no-unreachable": [2],
 		"no-unused-expressions": [2],
-		"no-unused-vars": [2],
+		"no-unused-vars": "off",
 		"no-use-before-define": [0],
 		"no-useless-call": [2],
 		"no-useless-concat": [2],
