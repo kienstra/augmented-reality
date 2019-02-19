@@ -12,7 +12,7 @@ Adds blocks for augmented reality experiences.
 **Donate link:** http://jdrf.org/get-involved/ways-to-donate/  
 **Requires PHP:** 7.1  
 
-[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com) 
+[![Build Status](https://travis-ci.org/kienstra/augmented-reality.svg?branch=master)](https://travis-ci.org/kienstra/augmented-reality) [![Built with Grunt](https://gruntjs.com/cdn/builtwith.svg)](http://gruntjs.com) 
 
 ## Description ##
 
@@ -44,8 +44,8 @@ Please see the [Getting Set Up](https://codelabs.developers.google.com/codelabs/
 ## Changelog ##
 
 ### 0.1.0 ###
-See the [v0.1.0 project](https://github.com/kienstra/augmented-reality/projects/1).
-
-- Adds the "AR Viewer" block, enabling augmented reality on some Android phones.
+- Adds the "AR Viewer" block, with controls to upload `.obj` and `.mtl` files.
+- Implements a [Google Codelab](https://codelabs.developers.google.com/codelabs/ar-with-webxr/index.html), with small changes to its JavaScript files.
+- Works on [select Android devices](https://developers.google.com/ar/discover/#supported_devices), with Chrome Dev and Canary 70-72.
 
 
