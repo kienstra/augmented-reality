@@ -65,7 +65,9 @@ export default registerBlockType(
 								</MediaUpload>
 								:
 								<div>
-									<span>{ url.match( '[^\\/]+\\.+' + fileType + '$' ) ? url.match( '[^\\/]+\\.+' + fileType + '$' )[0] : null }</span>
+									<span>
+										{ url.match( '[^\\/]+\\.+' + fileType + '$' ) ? url.match( '[^\\/]+\\.+' + fileType + '$' )[0] : null /* Display only the file name and extension, for example foo.obj instead of path/to/foo.obj */ }
+									</span>
 									{ url ?
 										<Button
 											className="button button-large"
