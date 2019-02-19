@@ -1,15 +1,14 @@
 /**
- * General block libraries.
+ * General block libraries and the block name.
  */
-const { __ } = wp.i18n;
-const { registerBlockType } = wp.blocks;
-const { MediaUpload } = wp.editor;
-const {
-	Button,
-	Placeholder
-} = wp.components;
-
-const arViewerBlock = 'augmented-reality/ar-viewer';
+const { __ } = wp.i18n,
+	{ registerBlockType } = wp.blocks,
+	{ MediaUpload } = wp.editor,
+	{
+		Button,
+		Placeholder
+	} = wp.components,
+	arViewerBlock = 'augmented-reality/ar-viewer';
 
 /**
  * Registers the AR Viewer block.
@@ -22,7 +21,6 @@ export default registerBlockType(
 		category: 'common',
 		icon: 'embed-generic',
 		keywords: [
-			__( 'MediaUpload', 'augmented-reality' ),
 			__( 'Augmented Reality', 'augmented-reality' ),
 		],
 		attributes: {
@@ -34,9 +32,59 @@ export default registerBlockType(
 			},
 		},
 
+		/**
+		 * Gets the block editor UI.
+		 *
+		 * @param {Object} props The editor properties.
+		 * @returns {string} The markup of the editor UI.
+		 */
 		edit: props => {
 			const { attributes: { objUrl, mtlUrl },
-				className, noticeUI, setAttributes } = props;
+					className, noticeUI, setAttributes } = props,
+				getViewerWrapper = ( url, fileType ) => {
+					return (
+						<div className="ar-viewer-wrapper">
+							{ ! url ?
+								<MediaUpload
+									onSelect={ img => {
+										let attributes = {};
+										attributes[ fileType + 'Url' ] = img.url;
+										setAttributes( attributes );
+									} }
+									type="image"
+									value={ url }
+									render={ ( { open } ) =>
+										<Button
+											className={ 'button button-large' }
+											onClick={ open }
+										>
+											{ __( 'Select %s file', 'augmented-reality' ).replace( '%s', fileType ) }
+										</Button>
+									}
+								>
+								</MediaUpload>
+								:
+								<div>
+									<span>
+										{ url.match( '[^\\/]+\\.+' + fileType + '$' ) ? url.match( '[^\\/]+\\.+' + fileType + '$' )[0] : null /* Display only the file name and extension, for example foo.obj instead of path/to/foo.obj */ }
+									</span>
+									{ url ?
+										<Button
+											className="button button-large"
+											onClick={ () => {
+												let attributes = {};
+												attributes[ fileType + 'Url' ] = null;
+												setAttributes( attributes );
+											} }
+										>
+											{ __( 'Remove %s file', 'augmented-reality' ).replace( '%s', fileType ) }
+										</Button>
+										: null }
+								</div>
+							}
+						</div>
+					)
+				};
 
 			return (
 				<div className={ className }>
@@ -48,85 +96,8 @@ export default registerBlockType(
 						className={ 'foo' }
 						notices={ noticeUI }
 					>
-
-						<div className="ar-viewer-wrapper">
-							{ ! objUrl ? (
-								<MediaUpload
-									onSelect={ img => {
-										setAttributes( {
-											objUrl: img.url,
-										} );
-									} }
-									type="image"
-									value={ objUrl }
-									render={ ( { open } ) => (
-										<Button
-											className={ "button button-large" }
-											onClick={ open }
-										>
-											{ __( 'Select .obj file', 'augmented-reality' ) }
-										</Button>
-									) }
-								>
-								</MediaUpload>
-							) : (
-								<div>
-									<span>{ objUrl.match( /[^\/]+\.obj+$/ ) ? objUrl.match( /[^\/]+\.obj+$/ )[0] : null }</span>
-									{ !! objUrl ? (
-										<Button
-											className="button button-large"
-											onClick={ () => {
-												setAttributes({
-													objUrl: null,
-												} );
-											} }
-										>
-											{ __( 'Remove .obj file', 'augmented-reality' ) }
-										</Button>
-									) : null }
-								</div>
-							) }
-						</div>
-
-						<div className="ar-viewer-wrapper">
-							{ ! mtlUrl ? (
-								<MediaUpload
-									onSelect={ img => {
-										setAttributes( {
-											mtlUrl: img.url,
-										} );
-									} }
-									type="image"
-									value={ mtlUrl }
-									render={ ( { open } ) => (
-										<Button
-											className="button button-large"
-											onClick={ open }
-										>
-											{ __( 'Select .mtl file', 'augmented-reality' ) }
-										</Button>
-									) }
-								>
-								</MediaUpload>
-							) : (
-								<div>
-									<span>{ mtlUrl.match( /[^\/]+\.mtl+$/ ) ? mtlUrl.match( /[^\/]+\.mtl+$/ )[0] : null }</span>
-									{ !! mtlUrl ? (
-										<Button
-											className="button button-large"
-											onClick={ () => {
-												setAttributes({
-													mtlUrl: null,
-												} );
-											} }
-										>
-											{ __( 'Remove .mtl file', 'augmented-reality' ) }
-										</Button>
-									) : null }
-								</div>
-							)
-						}
-						</div>
+						{ getViewerWrapper( objUrl, 'obj' ) }
+						{ getViewerWrapper( mtlUrl, 'mtl' ) }
 					</Placeholder>
 				</div>
 			)
@@ -136,9 +107,10 @@ export default registerBlockType(
 		 * Renders in PHP.
 		 *
 		 * @see Block::render_block().
+		 * @returns {null} Rendered in PHP.
 		 */
-		save: props => {
+		save: () => {
 			return null;
 		},
-	},
+	}
 );
