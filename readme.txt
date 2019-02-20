@@ -9,7 +9,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.1
 
-Adds blocks for augmented reality experiences.
+Augmented reality in a WordPress block. Upload any object, and see it in your room using your phone's camera.
 
 == Description ==
 ![demo-coffee-cup](https://user-images.githubusercontent.com/4063887/52908204-afc42180-3236-11e9-9dc7-cd52718000f9.gif)
