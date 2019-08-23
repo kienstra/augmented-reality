@@ -22,9 +22,6 @@
   "homepage": "https://github.com/kienstra/augmented-reality#readme",
   "devDependencies": {
     "@wordpress/scripts": "^3.4.0",
-    "babel-loader": "8.0.6",
-    "babel-plugin-inline-react-svg": "1.1.0",
-    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "webpack": "4.39.2",
     "webpack-cli": "3.3.7",
     "webpackbar": "4.0.0"
