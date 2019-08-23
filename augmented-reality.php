@@ -35,7 +35,8 @@ function _augmented_reality_build_notice() {
 	</div>
 	<?php
 }
-if ( ! file_exists( __DIR__ . '/vendor/autoload.php' ) || ! file_exists( __DIR__ . '/assets/js/blocks-compiled.js' ) ) {
-	add_action( 'admin_notices', '_augmented_reality_build_notice' );
+
+if ( ! file_exists( __DIR__ . '/vendor/autoload.php' ) || ! file_exists( __DIR__ . '/build/index.js' ) ) {
+	add_action( 'admin_notices', 'AugmentedReality\\_augmented_reality_build_notice' );
 	return;
 }
