@@ -26,7 +26,7 @@ class Block {
 	 *
 	 * @var string
 	 */
-	const JS_FILE_NAME = 'blocks-compiled';
+	const JS_FILE_NAME = 'index';
 
 	/**
 	 * The file type of .obj files.
@@ -74,7 +74,7 @@ class Block {
 	public function block_editor_assets() {
 		wp_enqueue_script(
 			Plugin::SLUG . '-' . self::JS_FILE_NAME,
-			$this->plugin->plugin_url . '/assets/js/' . self::JS_FILE_NAME . '.js',
+			$this->plugin->plugin_url . '/build/' . self::JS_FILE_NAME . '.js',
 			array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ),
 			Plugin::VERSION
 		);
