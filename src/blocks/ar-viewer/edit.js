@@ -49,7 +49,7 @@ class Edit extends Component {
 				<Placeholder
 					label={ __( 'Augmented Reality Viewer', 'augmented-reality' ) }
 					instructions={ ! objUrl || ! mtlUrl ? __( 'Please select both files', 'augmented-reality' ) : null }
-					icon={ 'gallery' }
+					icon="gallery"
 					notices={ noticeUI }
 				>
 					<MediaControl url={ objUrl } fileType="obj" setFile={ this.setFile } />

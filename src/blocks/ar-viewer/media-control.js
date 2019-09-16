@@ -12,6 +12,7 @@ const { Button } = wp.components;
  * @param {string} props.url The URL of the viewer.
  * @param {string} props.fileType The file type of the viewer, like obj.
  * @param {Function} props.setFile Sets the new file.
+ * @return {Function} THe JSX of the component.
  */
 const MediaControl = ( { url, fileType, setFile } ) => {
 	// Get only the file name and extension, for example foo.obj instead of path/to/foo.obj.
