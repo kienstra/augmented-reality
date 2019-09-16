@@ -21,16 +21,22 @@
   },
   "homepage": "https://github.com/kienstra/augmented-reality#readme",
   "devDependencies": {
+    "@wordpress/eslint-plugin": "3.0.0",
     "@wordpress/scripts": "^3.4.0",
+    "eslint": "6.3.0",
+    "eslint-plugin-eslint-comments": "3.1.2",
+    "eslint-plugin-import": "2.18.2",
     "webpack": "4.39.2",
     "webpack-cli": "3.3.7",
     "webpackbar": "4.0.0"
   },
   "scripts": {
     "build": "wp-scripts build",
+    "deploy": "grunt deploy",
     "dev": "wp-scripts start",
-    "pot-to-php": "pot-to-php languages/amp-js.pot languages/amp-translations.php amp",
-    "deploy": "grunt deploy"
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:js": "eslint src",
+    "lint:js:fix": "eslint src --fix"
   },
   "dependencies": {
     "@wordpress/dom-ready": "^2.0.0"
