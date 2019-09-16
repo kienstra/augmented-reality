@@ -111,7 +111,7 @@ class Block {
 		$real_mime = finfo_file( $finfo, $file );
 		finfo_close( $finfo );
 
-		// .obj and .mtl files can have a $real_mime of 'text/plain', so allow that tile type.
+		// .obj and .mtl files can have a $real_mime of 'text/plain', so allow that file type.
 		if ( 'text/plain' === $real_mime ) {
 			if ( $ob_match ) {
 				$wp_check_filetype_and_ext['ext']  = 'obj';
