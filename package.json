@@ -22,7 +22,7 @@
   "homepage": "https://github.com/kienstra/augmented-reality#readme",
   "devDependencies": {
     "@wordpress/eslint-plugin": "3.0.0",
-    "@wordpress/scripts": "^3.4.0",
+    "@wordpress/scripts": "3.4.0",
     "eslint": "6.3.0",
     "eslint-plugin-eslint-comments": "3.1.2",
     "eslint-plugin-import": "2.18.2",
@@ -39,6 +39,6 @@
     "lint:js:fix": "eslint src --fix"
   },
   "dependencies": {
-    "@wordpress/dom-ready": "^2.0.0"
+    "@wordpress/dom-ready": "2.5.0"
   }
 }
