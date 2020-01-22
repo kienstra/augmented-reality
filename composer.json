@@ -16,7 +16,7 @@
     "require-dev": {
         "wp-coding-standards/wpcs": "*",
         "phpcompatibility/phpcompatibility-wp": "*",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
         "xwp/wp-dev-lib": "^1.0",
         "brainmaestro/composer-git-hooks": "^2.6",
         "brain/monkey": "^2"
