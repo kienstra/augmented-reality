@@ -62,10 +62,10 @@ class Block {
 	 * Inits the class.
 	 */
 	public function init() {
-		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
-		add_action( 'mime_types', array( $this, 'add_mime_types' ) );
-		add_action( 'wp_check_filetype_and_ext', array( $this, 'check_filetype_and_ext' ), 10, 3 );
-		add_action( 'init', array( $this, 'register_block' ) );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'block_editor_assets' ] );
+		add_action( 'mime_types', [ $this, 'add_mime_types' ] );
+		add_action( 'wp_check_filetype_and_ext', [ $this, 'check_filetype_and_ext' ], 10, 3 );
+		add_action( 'init', [ $this, 'register_block' ] );
 	}
 
 	/**
@@ -75,7 +75,7 @@ class Block {
 		wp_enqueue_script(
 			Plugin::SLUG . '-' . self::JS_FILE_NAME,
 			$this->plugin->plugin_url . '/build/' . self::JS_FILE_NAME . '.js',
-			array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ),
+			[ 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ],
 			Plugin::VERSION,
 			true
 		);
@@ -146,17 +146,17 @@ class Block {
 		if ( function_exists( 'register_block_type' ) ) {
 			register_block_type(
 				self::BLOCK_NAME,
-				array(
-					'attributes'      => array(
-						'objUrl' => array(
+				[
+					'attributes'      => [
+						'objUrl' => [
 							'type' => 'string',
-						),
-						'mtlUrl' => array(
+						],
+						'mtlUrl' => [
 							'type' => 'string',
-						),
-					),
-					'render_callback' => array( $this, 'render_block' ),
-				)
+						],
+					],
+					'render_callback' => [ $this, 'render_block' ],
+				]
 			);
 		}
 	}

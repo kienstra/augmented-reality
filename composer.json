@@ -17,7 +17,6 @@
         "wp-coding-standards/wpcs": "*",
         "phpcompatibility/phpcompatibility-wp": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
-        "xwp/wp-dev-lib": "^1.0",
         "brain/monkey": "^2"
     },
     "autoload": {

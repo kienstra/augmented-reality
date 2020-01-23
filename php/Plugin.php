@@ -54,7 +54,7 @@ class Plugin {
 	 *
 	 * @var array
 	 */
-	public $classes = array( 'Asset', 'Block' );
+	public $classes = [ 'Asset', 'Block' ];
 
 	/**
 	 * Initiate the plugin.
@@ -62,7 +62,7 @@ class Plugin {
 	public function init() {
 		$this->init_classes();
 		$this->plugin_url = plugins_url( self::SLUG );
-		add_action( 'init', array( $this, 'plugin_localization' ) );
+		add_action( 'init', [ $this, 'plugin_localization' ] );
 	}
 
 	/**

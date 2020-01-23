@@ -2,14 +2,19 @@
 <ruleset name="WordPress Coding Standards for Augmented Reality">
 	<description>Sniffs for plugin and VIP WordPress standards</description>
 
-	<rule ref="WordPress-Core" />
+	<rule ref="WordPress-Core">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax" />
+		<exclude name="WordPress.Files.FileName" />
+	</rule>
 	<rule ref="WordPress-Docs" />
 	<rule ref="WordPress-Extra" />
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" value="augmented-reality" />
 		</properties>
 	</rule>
+	<rule ref="Squiz.Classes.ClassFileName" />
 
 	<arg name="extensions" value="php"/>
 
@@ -21,6 +26,7 @@
 
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>

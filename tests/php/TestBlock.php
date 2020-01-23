@@ -12,7 +12,7 @@ use Brain\Monkey\Functions;
 /**
  * Tests for class Block.
  */
-class Test_Block extends \WP_UnitTestCase {
+class TestBlock extends \WP_UnitTestCase {
 
 	/**
 	 * Instance of Block.
@@ -49,9 +49,9 @@ class Test_Block extends \WP_UnitTestCase {
 	 */
 	public function test_init() {
 		$this->instance->init();
-		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', array( $this->instance, 'block_editor_assets' ) ) );
-		$this->assertEquals( 10, has_filter( 'wp_check_filetype_and_ext', array( $this->instance, 'check_filetype_and_ext' ) ) );
-		$this->assertEquals( 10, has_action( 'init', array( $this->instance, 'register_block' ) ) );
+		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', [ $this->instance, 'block_editor_assets' ] ) );
+		$this->assertEquals( 10, has_filter( 'wp_check_filetype_and_ext', [ $this->instance, 'check_filetype_and_ext' ] ) );
+		$this->assertEquals( 10, has_action( 'init', [ $this->instance, 'register_block' ] ) );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Test_Block extends \WP_UnitTestCase {
 		$this->assertTrue( in_array( $slug, $scripts->queue, true ) );
 
 		$this->assertEquals(
-			array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ),
+			[ 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ],
 			$script->deps
 		);
 		$this->assertEmpty( $script->extra );
@@ -82,7 +82,7 @@ class Test_Block extends \WP_UnitTestCase {
 	 * @covers Plugin::add_mime_types().
 	 */
 	public function test_add_mime_types() {
-		$original_mime_types = array( 'gif' => 'image/gif' );
+		$original_mime_types = [ 'gif' => 'image/gif' ];
 		$filtered_mimes      = $this->instance->add_mime_types( $original_mime_types );
 
 		// The original mime types should still be present.
@@ -101,17 +101,17 @@ class Test_Block extends \WP_UnitTestCase {
 			function( $block_name, $block_args ) {
 				$this->assertEquals( Block::BLOCK_NAME, $block_name );
 				$this->assertEquals(
-					array(
-						'attributes'      => array(
-							'objUrl' => array(
+					[
+						'attributes'      => [
+							'objUrl' => [
 								'type' => 'string',
-							),
-							'mtlUrl' => array(
+							],
+							'mtlUrl' => [
 								'type' => 'string',
-							),
-						),
-						'render_callback' => array( $this->instance, 'render_block' ),
-					),
+							],
+						],
+						'render_callback' => [ $this->instance, 'render_block' ],
+					],
 					$block_args
 				);
 			}
@@ -130,16 +130,16 @@ class Test_Block extends \WP_UnitTestCase {
 		$mtl_url = 'https://example.com/baz.mtl';
 
 		// If the $attributes argument is an empty array(), this should not output anything.
-		$this->assertEmpty( $this->instance->render_block( array() ) );
+		$this->assertEmpty( $this->instance->render_block( [] ) );
 
 		// If the $attributes argument only has an 'mtlUrl' value, this should not output anything.
-		$this->assertEmpty( $this->instance->render_block( array( 'mtlUrl' => $mtl_url ) ) );
+		$this->assertEmpty( $this->instance->render_block( [ 'mtlUrl' => $mtl_url ] ) );
 
 		// Now that both the 'objUrl' and 'mtlUrl' are present, this should render the block.
-		$correct_args = array(
+		$correct_args = [
 			'objUrl' => $obj_url,
 			'mtlUrl' => $mtl_url,
-		);
+		];
 		$markup       = $this->instance->render_block( $correct_args );
 
 		$this->assertContains( $obj_url, $markup );
@@ -157,11 +157,11 @@ class Test_Block extends \WP_UnitTestCase {
 	 * @covers Plugin::check_filetype_and_ext().
 	 */
 	public function test_check_filetype_and_ext() {
-		$initial_wp_check_filetype_and_ext = array(
+		$initial_wp_check_filetype_and_ext = [
 			'ext'             => false,
 			'type'            => false,
 			'proper_filename' => false,
-		);
+		];
 		$wrong_filename                    = 'baz.gif';
 		$file                              = "example/$wrong_filename";
 
@@ -176,11 +176,11 @@ class Test_Block extends \WP_UnitTestCase {
 
 		// This now passes an .obj file, so the filtered value should be different.
 		$this->assertEquals(
-			array(
+			[
 				'ext'             => 'obj',
 				'type'            => 'application/obj',
 				'proper_filename' => false,
-			),
+			],
 			$this->instance->check_filetype_and_ext( $initial_wp_check_filetype_and_ext, $file, $correct_filename )
 		);
 
@@ -189,11 +189,11 @@ class Test_Block extends \WP_UnitTestCase {
 
 		// This now passes an .obj file, so the filtered value should be different.
 		$this->assertEquals(
-			array(
+			[
 				'ext'             => 'mtl',
 				'type'            => 'application/mtl',
 				'proper_filename' => false,
-			),
+			],
 			$this->instance->check_filetype_and_ext( $initial_wp_check_filetype_and_ext, $file, $mtl_filename )
 		);
 	}

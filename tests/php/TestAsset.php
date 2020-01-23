@@ -10,7 +10,7 @@ namespace AugmentedReality;
 /**
  * Tests for class Asset.
  */
-class Test_Asset extends \WP_UnitTestCase {
+class TestAsset extends \WP_UnitTestCase {
 
 	/**
 	 * Instance of Asset.
@@ -47,8 +47,8 @@ class Test_Asset extends \WP_UnitTestCase {
 	 */
 	public function test_init() {
 		$this->instance->init();
-		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->instance, 'ar_viewer_assets' ) ) );
-		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', array( $this->instance, 'block_editor_styles' ) ) );
+		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', [ $this->instance, 'ar_viewer_assets' ] ) );
+		$this->assertEquals( 10, has_action( 'enqueue_block_editor_assets', [ $this->instance, 'block_editor_styles' ] ) );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Test_Asset extends \WP_UnitTestCase {
 
 			$this->assertEquals(
 				array_map(
-					array( $this->instance, 'get_full_slug' ),
+					[ $this->instance, 'get_full_slug' ],
 					$dependencies
 				),
 				$script->deps
@@ -83,7 +83,7 @@ class Test_Asset extends \WP_UnitTestCase {
 					$data
 				);
 				$this->assertContains(
-					wp_json_encode( array( 'anchorUrl' => $this->instance->plugin->plugin_url . '/assets/Anchor.png' ) ),
+					wp_json_encode( [ 'anchorUrl' => $this->instance->plugin->plugin_url . '/assets/Anchor.png' ] ),
 					$data
 				);
 			}
@@ -115,8 +115,8 @@ class Test_Asset extends \WP_UnitTestCase {
 
 		$stylesheet = $styles->registered[ $expected_slug ];
 		$this->assertEquals( 'all', $stylesheet->args );
-		$this->assertEquals( array(), $stylesheet->deps );
-		$this->assertEquals( array(), $stylesheet->extra );
+		$this->assertEquals( [], $stylesheet->deps );
+		$this->assertEquals( [], $stylesheet->extra );
 		$this->assertEquals( $expected_slug, $stylesheet->handle );
 		$this->assertEquals( $this->instance->plugin->plugin_url . '/assets/css/' . Asset::EDITOR_STYLES_SLUG . '.css', $stylesheet->src );
 		$this->assertEquals( Plugin::VERSION, $stylesheet->ver );
