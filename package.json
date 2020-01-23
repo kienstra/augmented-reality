@@ -39,6 +39,6 @@
     "lint:js:fix": "eslint src --fix"
   },
   "dependencies": {
-    "@wordpress/dom-ready": "^2.0.0"
+    "@wordpress/dom-ready": "^2.6.0"
   }
 }
