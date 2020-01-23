@@ -64,7 +64,7 @@ class Test_Block extends \WP_UnitTestCase {
 		$scripts = wp_scripts();
 		$slug    = Plugin::SLUG . '-' . Block::JS_FILE_NAME;
 		$script  = $scripts->registered[ $slug ];
-		$this->assertTrue( in_array( $slug, $scripts->queue ) );
+		$this->assertTrue( in_array( $slug, $scripts->queue, true ) );
 
 		$this->assertEquals(
 			array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ),
