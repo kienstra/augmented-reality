@@ -10,7 +10,7 @@ namespace AugmentedReality;
 /**
  * Tests for augmented-reality.php.
  */
-class Test_Augmented_Reality extends \WP_UnitTestCase {
+class TestAugmentedReality extends \WP_UnitTestCase {
 
 	/**
 	 * Test _augmented_reality_build_notice().

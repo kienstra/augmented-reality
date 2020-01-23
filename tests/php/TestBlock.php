@@ -12,7 +12,7 @@ use Brain\Monkey\Functions;
 /**
  * Tests for class Block.
  */
-class Test_Block extends \WP_UnitTestCase {
+class TestBlock extends \WP_UnitTestCase {
 
 	/**
 	 * Instance of Block.

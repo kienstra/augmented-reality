@@ -10,7 +10,7 @@ namespace AugmentedReality;
 /**
  * Tests for class Asset.
  */
-class Test_Asset extends \WP_UnitTestCase {
+class TestAsset extends \WP_UnitTestCase {
 
 	/**
 	 * Instance of Asset.

@@ -10,7 +10,7 @@ namespace AugmentedReality;
 /**
  * Tests for class Plugin.
  */
-class Test_Plugin extends \WP_UnitTestCase {
+class TestPlugin extends \WP_UnitTestCase {
 
 	/**
 	 * Instance of plugin.
