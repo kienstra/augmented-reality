@@ -39,13 +39,13 @@ class Asset {
 	 *
 	 * }
 	 */
-	public $js_files = array(
-		'three'     => array(),
-		'OBJLoader' => array( 'three' ),
-		'MTLLoader' => array( 'three', 'OBJLoader' ),
-		'utils'     => array( 'three', 'OBJLoader', 'MTLLoader' ),
-		'app'       => array( 'three', 'OBJLoader', 'MTLLoader', 'utils' ),
-	);
+	public $js_files = [
+		'three'     => [],
+		'OBJLoader' => [ 'three' ],
+		'MTLLoader' => [ 'three', 'OBJLoader' ],
+		'utils'     => [ 'three', 'OBJLoader', 'MTLLoader' ],
+		'app'       => [ 'three', 'OBJLoader', 'MTLLoader', 'utils' ],
+	];
 
 	/**
 	 * Asset constructor.
@@ -60,8 +60,8 @@ class Asset {
 	 * Inits the class.
 	 */
 	public function init() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'ar_viewer_assets' ) );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_styles' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'ar_viewer_assets' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'block_editor_styles' ] );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Asset {
 				$this->get_full_slug( $slug ),
 				$this->plugin->plugin_url . '/assets/vendor/' . $slug . '.js',
 				array_map(
-					array( $this, 'get_full_slug' ),
+					[ $this, 'get_full_slug' ],
 					$dependencies
 				),
 				Plugin::VERSION,
@@ -84,9 +84,9 @@ class Asset {
 		wp_localize_script(
 			$this->get_full_slug( 'utils' ),
 			self::LOCALIZED_DATA_NAME,
-			array(
+			[
 				'anchorUrl' => $this->plugin->plugin_url . '/assets/Anchor.png',
-			)
+			]
 		);
 	}
 
@@ -108,7 +108,7 @@ class Asset {
 		wp_enqueue_style(
 			$this->get_full_slug( self::EDITOR_STYLES_SLUG ),
 			$this->plugin->plugin_url . '/assets/css/' . self::EDITOR_STYLES_SLUG . '.css',
-			array(),
+			[],
 			Plugin::VERSION
 		);
 	}

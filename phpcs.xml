@@ -2,9 +2,12 @@
 <ruleset name="WordPress Coding Standards for Augmented Reality">
 	<description>Sniffs for plugin and VIP WordPress standards</description>
 
-	<rule ref="WordPress-Core" />
+	<rule ref="WordPress-Core">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax" />
+	</rule>
 	<rule ref="WordPress-Docs" />
 	<rule ref="WordPress-Extra" />
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" value="augmented-reality" />
