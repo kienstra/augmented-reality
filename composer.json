@@ -18,21 +18,7 @@
         "phpcompatibility/phpcompatibility-wp": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
         "xwp/wp-dev-lib": "^1.0",
-        "brainmaestro/composer-git-hooks": "^2.6",
         "brain/monkey": "^2"
-    },
-    "extra": {
-        "hooks": {
-            "pre-commit": "./vendor/xwp/wp-dev-lib/scripts/pre-commit"
-        }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "vendor/bin/cghooks add --no-lock"
-        ],
-        "post-update-cmd": [
-            "vendor/bin/cghooks update"
-        ]
     },
     "autoload": {
         "psr-4": {"AugmentedReality\\": "php/"}

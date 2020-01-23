@@ -85,7 +85,7 @@ class Asset {
 			$this->get_full_slug( 'utils' ),
 			self::LOCALIZED_DATA_NAME,
 			array(
-				'anchorUrl' => $this->plugin->plugin_url . '/assets/Anchor.png'
+				'anchorUrl' => $this->plugin->plugin_url . '/assets/Anchor.png',
 			)
 		);
 	}

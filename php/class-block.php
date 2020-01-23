@@ -76,15 +76,16 @@ class Block {
 			Plugin::SLUG . '-' . self::JS_FILE_NAME,
 			$this->plugin->plugin_url . '/build/' . self::JS_FILE_NAME . '.js',
 			array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ),
-			Plugin::VERSION
+			Plugin::VERSION,
+			true
 		);
 	}
 
 	/**
 	 * Allow .obj and .mtl files, as they normally are not allowed.
 	 *
-	 * @param array $wp_check_filetype_and_ext[] {
-	 *     The file data.
+	 * @param array  $wp_check_filetype_and_ext {
+	 *      The file data.
 	 *
 	 *     @type string    $ext The file extension.
 	 *     @type string    $type The file type.
@@ -92,7 +93,7 @@ class Block {
 	 * }
 	 * @param string $file                      The full path of the file.
 	 * @param string $filename                  The file name.
-	 * @return array $wp_check_filetype_and_ext The filtered file data.
+	 * @return array The filtered file data.
 	 */
 	public function check_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filename ) {
 		$ob_match      = preg_match( '/\.obj$/', $filename );
