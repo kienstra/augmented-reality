@@ -4,19 +4,19 @@ lint_files() {
 	linting_command=$1
 	files=$2
 
-	if [ -n "$files" ]; then
-		if ! $linting_command $files; then
-			exit 1
-		fi
+	if [ -n "$files" ] && ! $linting_command $files; then
+		exit 1
 	fi
 }
 
+staged_files=$( git diff --staged --diff-filter=d --name-only )
+
 # Lint staged PHP files.
-php_files=$( git diff --staged --diff-filter=d --name-only | grep -E '/*\.php$' )
+php_files=$( echo "$staged_files" | grep -E '/*\.php$' )
 lint_files "npm run lint:php" "$php_files"
 
 # Lint staged JS files.
-js_files=$( git diff --staged --diff-filter=d --name-only | grep -E '^src\/\S*\.js$' )
+js_files=$( echo "$staged_files" | grep -E '^src\/\S*\.js$' )
 lint_files "npm run lint:js:files" "$js_files"
 
 # Lint package.json.
