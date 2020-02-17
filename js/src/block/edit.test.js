@@ -10,15 +10,14 @@ import { render, screen } from '@testing-library/react';
  */
 import Edit from './edit';
 
-function mockFunctions() {
+// Mock the <InpectorControls> component only, so that the other components in this package behave as usual.
+jest.mock( '@wordpress/block-editor', () => {
 	const original = require.requireActual( '@wordpress/block-editor' );
 	return {
 		...original,
 		InspectorControls: ( { children } ) => children,
 	};
-}
-
-jest.mock( '@wordpress/block-editor', () => mockFunctions() );
+} );
 
 const baseProps = { attributes: {} };
 const setup = ( props ) => {
