@@ -29,6 +29,9 @@ export default registerBlockType(
 			url: {
 				type: 'string',
 			},
+			backgroundColor: {
+				type: 'string',
+			},
 		},
 
 		/**

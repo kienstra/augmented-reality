@@ -10,6 +10,16 @@ import { render, screen } from '@testing-library/react';
  */
 import Edit from './edit';
 
+function mockFunctions() {
+	const original = require.requireActual( '@wordpress/block-editor' );
+	return {
+		...original,
+		InspectorControls: ( { children } ) => children,
+	};
+}
+
+jest.mock( '@wordpress/block-editor', () => mockFunctions() );
+
 const baseProps = { attributes: {} };
 const setup = ( props ) => {
 	return render( <Edit { ...props } /> );
@@ -18,6 +28,11 @@ const setup = ( props ) => {
 const instructions = 'Upload a model file, or choose one from your media library';
 
 describe( 'Edit', () => {
+	it( 'displays the color pallete text', () => {
+		setup( baseProps );
+		expect( screen.getByText( 'Background Color' ) ).toBeInTheDocument();
+	} );
+
 	it( 'displays the instructions, even if there is no url or id', () => {
 		setup( baseProps );
 		expect( screen.getByText( instructions ) ).toBeInTheDocument();
@@ -28,7 +43,6 @@ describe( 'Edit', () => {
 		[ '', 'Model' ],
 	] )( 'displays the correct title, depending on whether there is a url', ( url, expectedTitle ) => {
 		setup( { attributes: { url } } );
-
 		expect( screen.getByText( expectedTitle ) ).toBeInTheDocument();
 	} );
 

@@ -73,17 +73,24 @@ class TestBlock extends TestCase {
 	 */
 	public function get_render_block_data() {
 		return [
-			'no_attribute' => [
+			'no_attribute'            => [
 				[],
 				null,
 			],
-			'empty_url'    => [
+			'empty_url'               => [
 				[ 'url' => '' ],
 				'<model-viewer src="" camera-controls auto-rotate></model-viewer>',
 			],
-			'url_exists'   => [
+			'url_exists'              => [
 				[ 'url' => 'https://foo.com' ],
 				'<model-viewer src="https://foo.com" camera-controls auto-rotate></model-viewer>',
+			],
+			'background_color_exists' => [
+				[
+					'url'             => 'https://foo.com',
+					'backgroundColor' => '#777777',
+				],
+				'<model-viewer src="https://foo.com" camera-controls auto-rotate background-color="#777777"></model-viewer>',
 			],
 		];
 	}
@@ -98,6 +105,11 @@ class TestBlock extends TestCase {
 	 * @param string|null $expected   The expected return value.
 	 */
 	public function test_render_block( $attributes, $expected ) {
-		$this->assertEquals( $expected, trim( $this->instance->render_block( $attributes ) ) );
+		$markup = trim( $this->instance->render_block( $attributes ) );
+		$actual = preg_replace( '/[\n|\t]+/', ' ', $markup );
+		$actual = preg_replace( '/(?<=>)\s+(?=<)/', '', $actual );
+		$actual = preg_replace( '/\s+(?=>)/', '', $actual );
+
+		$this->assertEquals( $expected, $actual );
 	}
 }

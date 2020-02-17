@@ -53,11 +53,14 @@ class Block {
 				self::BLOCK_NAME,
 				[
 					'attributes'      => [
-						'url' => [
+						'url'             => [
 							'type' => 'string',
 						],
-						'id'  => [
+						'id'              => [
 							'type' => 'number',
+						],
+						'backgroudnColor' => [
+							'tyep' => 'string',
 						],
 					],
 					'render_callback' => [ $this, 'render_block' ],
@@ -79,7 +82,15 @@ class Block {
 
 		ob_start();
 		?>
-		<model-viewer src="<?php echo esc_attr( $attributes['url'] ); ?>" camera-controls auto-rotate></model-viewer>
+		<model-viewer
+			src="<?php echo esc_attr( $attributes['url'] ); ?>"
+			camera-controls
+			auto-rotate
+			<?php if ( isset( $attributes['backgroundColor'] ) ) : ?>
+				background-color="<?php echo esc_attr( $attributes['backgroundColor'] ); ?>"
+			<?php endif; ?>
+		>
+		</model-viewer>
 		<?php
 
 		$this->plugin->components->Asset->enqueue_script( Asset::MODEL_VIEWER_JS_SLUG );
