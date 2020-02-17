@@ -24,10 +24,9 @@
 	<!-- Allow invoking just `phpcs` on command line without assuming STDIN for file input. -->
 	<file>.</file>
 
+	<exclude-pattern>/js/dist/*.asset.php</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/build/*</exclude-pattern>
-	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
+	<exclude-pattern>/tests/bootstrap.php</exclude-pattern>
 </ruleset>

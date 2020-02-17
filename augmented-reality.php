@@ -19,4 +19,4 @@ License: GPLv3
 
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 
-( new Plugin() )->init();
+( new Plugin( __FILE__ ) )->init();

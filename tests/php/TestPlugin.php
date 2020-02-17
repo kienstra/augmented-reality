@@ -7,58 +7,96 @@
 
 namespace AugmentedReality;
 
+use WP_Mock;
+
 /**
  * Tests for class Plugin.
  */
-class TestPlugin extends \WP_UnitTestCase {
+class TestPlugin extends TestCase {
 
 	/**
 	 * Instance of plugin.
 	 *
 	 * @var Plugin
 	 */
-	public $plugin;
+	public $instance;
 
 	/**
 	 * Setup.
 	 *
 	 * @inheritdoc
 	 */
-	public function setUp() {
+	public function setUp() : void {
 		parent::setUp();
-		$this->plugin = new Plugin();
+		$this->instance = new Plugin( dirname( dirname( __FILE__ ) ) );
 	}
 
 	/**
 	 * Test init().
 	 *
-	 * @covers Plugin::init().
+	 * @covers \AugmentedReality\Plugin::init()
 	 */
 	public function test_init() {
-		$this->plugin->init();
-		$this->assertNotEquals( false, did_action( 'load_textdomain' ) );
-		$this->assertContains( Plugin::SLUG, $this->plugin->plugin_url );
+		WP_Mock::expectActionAdded( 'init', [ $this->instance, 'plugin_localization' ] );
+
+		$this->instance->init();
 	}
 
 	/**
-	 * Test init_classes().
+	 * Test init_classes.
 	 *
-	 * @covers Plugin::init_classes().
+	 * @covers \AugmentedReality\Plugin::init_classes()
 	 */
 	public function test_init_classes() {
-		$this->plugin->init_classes();
-		foreach ( $this->plugin->classes as $class ) {
-			$this->assertEquals( __NAMESPACE__ . '\\' . $class, get_class( $this->plugin->components->$class ) );
+		$this->instance->init_classes();
+		foreach ( [ 'Asset', 'Block' ] as $class ) {
+			$this->assertEquals( __NAMESPACE__ . '\\' . $class, get_class( $this->instance->components->$class ) );
 		}
 	}
 
 	/**
 	 * Test plugin_localization().
 	 *
-	 * @covers Plugin::plugin_localization().
+	 * @covers \AugumentedReality\Plugin::plugin_localization()
 	 */
 	public function test_plugin_localization() {
-		$this->plugin->plugin_localization();
-		$this->assertNotEquals( false, did_action( 'load_textdomain' ) );
+		WP_Mock::userFunction( 'load_plugin_textdomain' )
+			->once()
+			->withSomeOfArgs( 'augmented-reality' );
+
+		$this->instance->plugin_localization();
+	}
+
+	/**
+	 * Test get_path.
+	 *
+	 * @covers \AugmentedReality\Plugin::get_path()
+	 */
+	public function test_get_path() {
+		$this->assertIsString( $this->instance->get_path() );
+	}
+
+	/**
+	 * Test get_dir.
+	 *
+	 * @covers \AugmentedReality\Plugin::get_dir()
+	 */
+	public function test_get_dir() {
+		$this->assertIsString( $this->instance->get_dir() );
+	}
+
+
+	/**
+	 * Test get_script_path.
+	 *
+	 * @covers \AugmentedReality\Plugin::get_script_path()
+	 */
+	public function test_get_script_path() {
+		WP_Mock::userFunction( 'plugins_url' )
+			->once()
+			->andReturnArg( 0 );
+		$slug = 'example';
+
+		$this->assertStringContainsString( $slug, $this->instance->get_script_path( $slug ) );
 	}
 }

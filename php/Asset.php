@@ -15,11 +15,18 @@ namespace AugmentedReality;
 class Asset {
 
 	/**
-	 * The name of the localized data for the utils.js script.
+	 * The slug of the block JS file.
 	 *
 	 * @var string
 	 */
-	const LOCALIZED_DATA_NAME = 'augmentedReality';
+	const BLOCK_JS_SLUG = 'block';
+
+	/**
+	 * The slug of the block JS file.
+	 *
+	 * @var string
+	 */
+	const MODEL_VIEWER_JS_SLUG = 'model-viewer';
 
 	/**
 	 * The slug of the editor stylesheet.
@@ -29,23 +36,11 @@ class Asset {
 	const EDITOR_STYLES_SLUG = 'editor-styles';
 
 	/**
-	 * JavaScript files
+	 * The plugin.
 	 *
-	 * @var array {
-	 *    The JavaScript files to enqueue.
-	 *
-	 *    @type string $slug The slug of the file.
-	 *    @type array  $dependencies The file's dependencies.
-	 *
-	 * }
+	 * @var Plugin
 	 */
-	public $js_files = [
-		'three'     => [],
-		'OBJLoader' => [ 'three' ],
-		'MTLLoader' => [ 'three', 'OBJLoader' ],
-		'utils'     => [ 'three', 'OBJLoader', 'MTLLoader' ],
-		'app'       => [ 'three', 'OBJLoader', 'MTLLoader', 'utils' ],
-	];
+	public $plugin;
 
 	/**
 	 * Asset constructor.
@@ -60,56 +55,56 @@ class Asset {
 	 * Inits the class.
 	 */
 	public function init() {
-		add_action( 'wp_enqueue_scripts', [ $this, 'ar_viewer_assets' ] );
-		add_action( 'enqueue_block_editor_assets', [ $this, 'block_editor_styles' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_editor_scripts' ] );
 	}
 
 	/**
-	 * Enqueues the front-end assets for the AR Viewer assets.
+	 * Registers the scripts for the block.
+	 *
+	 * Not simply enqueued here, as one of the scripts also is enqueued
+	 * in the 'render_callback' of the block.
 	 */
-	public function ar_viewer_assets() {
-		foreach ( $this->js_files as $slug => $dependencies ) {
-			wp_register_script(
-				$this->get_full_slug( $slug ),
-				$this->plugin->plugin_url . '/assets/vendor/' . $slug . '.js',
-				array_map(
-					[ $this, 'get_full_slug' ],
-					$dependencies
-				),
-				Plugin::VERSION,
-				true
-			);
+	public function enqueue_block_editor_scripts() {
+		foreach ( [ self::BLOCK_JS_SLUG, self::MODEL_VIEWER_JS_SLUG ] as $slug ) {
+			$this->enqueue_script( $slug );
 		}
+	}
 
-		wp_localize_script(
-			$this->get_full_slug( 'utils' ),
-			self::LOCALIZED_DATA_NAME,
-			[
-				'anchorUrl' => $this->plugin->plugin_url . '/assets/Anchor.png',
-			]
+	/**
+	 * Enqueues a script by its slug.
+	 *
+	 * @param string $slug The slug of the script.
+	 */
+	public function enqueue_script( $slug ) {
+		$config = $this->get_script_config( self::MODEL_VIEWER_JS_SLUG );
+		\wp_enqueue_script(
+			$this->get_prefixed_slug( $slug ),
+			$this->plugin->get_script_path( $slug ),
+			$config['dependencies'],
+			$config['version'],
+			true
 		);
 	}
 
 	/**
-	 * Gets the slug of the asset prepended with the plugin name.
-	 * For example, augmented-reality-app.
+	 * Gets the slug of the asset, prefixed with the plugin slug.
+	 * For example, 'augmented-reality-block'.
 	 *
 	 * @param string $asset_slug The slug of the asset.
 	 * @return string $full_slug The slug of the asset, prepended with the plugin slug.
 	 */
-	public function get_full_slug( $asset_slug ) {
+	private function get_prefixed_slug( $asset_slug ) {
 		return Plugin::SLUG . '-' . $asset_slug;
 	}
 
 	/**
-	 * Enqueues the block editor.
+	 * Gets the config of the script, including dependencies.
+	 *
+	 * @param string $slug The slug of the script.
+	 * @return array The config of the script.
 	 */
-	public function block_editor_styles() {
-		wp_enqueue_style(
-			$this->get_full_slug( self::EDITOR_STYLES_SLUG ),
-			$this->plugin->plugin_url . '/assets/css/' . self::EDITOR_STYLES_SLUG . '.css',
-			[],
-			Plugin::VERSION
-		);
+	private function get_script_config( $slug ) {
+		$plugin_path = $this->plugin->get_dir();
+		return require "{$plugin_path}/js/dist/{$slug}.asset.php";
 	}
 }
