@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  */
 const Edit = ( { attributes: { className, id, url }, setAttributes } ) => {
 	const labels = {
-		title: ! url ? __( 'Model', 'augmented-reality' ) : __( 'Edit model', 'augmented-reality' ),
+		title: !! url ? __( 'Edit model', 'augmented-reality' ) : __( 'Model', 'augmented-reality' ),
 		instructions: __( 'Upload a model file, or choose one from your media library', 'augmented-reality' ),
 	};
 

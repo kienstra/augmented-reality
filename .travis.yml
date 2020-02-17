@@ -15,7 +15,13 @@ cache:
 matrix:
   include:
     - php: 7.4snapshot
+      env: WP_TRAVISCI=test-php
     - php: 7.3
+      env: WP_TRAVISCI=test-php
+    - php: 7.2
+      env: WP_TRAVISCI=test-php
+    - php: 7.2
+      env: WP_TRAVISCI=test-js
     - php: 7.2
       env: WP_TRAVISCI=lint
 
@@ -35,10 +41,12 @@ before_script:
 
 script:
   - |
-    if [[ "$WP_TRAVISCI" == "lint" ]] ; then
+    if [[ "$WP_TRAVISCI" == "test-php" ]] ; then
+      npm run test:php
+    elif [[ "$WP_TRAVISCI" == "test-js" ]] ; then
+      npm run test:js
+    elif [[ "$WP_TRAVISCI" == "lint" ]] ; then
       npm run lint:php
       npm run lint:js
       npm run lint:pkg-json
-    else
-      npm run test:php
     fi
