@@ -2,7 +2,6 @@
  * External dependencies
  */
 import '@testing-library/jest-dom/extend-expect';
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 /**
@@ -24,8 +23,6 @@ const setup = ( props ) => {
 	return render( <Edit { ...props } /> );
 };
 
-const instructions = 'Upload a model file, or choose one from your media library';
-
 describe( 'Edit', () => {
 	it( 'displays the color pallete text', () => {
 		setup( baseProps );
@@ -34,7 +31,7 @@ describe( 'Edit', () => {
 
 	it( 'displays the instructions, even if there is no url or id', () => {
 		setup( baseProps );
-		expect( screen.getByText( instructions ) ).toBeInTheDocument();
+		expect( screen.getByText( 'Upload a model file, or choose one from your media library' ) ).toBeInTheDocument();
 	} );
 
 	it.each( [
