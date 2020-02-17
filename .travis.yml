@@ -63,7 +63,7 @@ before_script:
 script:
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
-      phpunit
+      npm run test:php
       WP_MULTISITE=1 phpunit
     fi
   - |

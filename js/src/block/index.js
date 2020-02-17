@@ -9,13 +9,11 @@ const { registerBlockType } = wp.blocks;
  */
 import Edit from './edit';
 
-const arViewerBlock = 'augmented-reality/ar-viewer';
-
 /**
  * Registers the AR Viewer block.
  */
 export default registerBlockType(
-	arViewerBlock,
+	'augmented-reality/ar-viewer',
 	{
 		title: __( 'AR Viewer', 'augmented-reality' ),
 		description: __( 'Place a virtual item in your location', 'augmented-reality' ),
@@ -25,10 +23,10 @@ export default registerBlockType(
 			__( 'Augmented Reality', 'augmented-reality' ),
 		],
 		attributes: {
-			objUrl: {
-				type: 'string',
+			id: {
+				type: 'number',
 			},
-			mtlUrl: {
+			url: {
 				type: 'string',
 			},
 		},
@@ -44,7 +42,7 @@ export default registerBlockType(
 		 * @see Block::render_block().
 		 * @return {null} Rendered in PHP.
 		 */
-		save: () => {
+		save() {
 			return null;
 		},
 	}

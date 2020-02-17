@@ -7,6 +7,8 @@
 
 namespace AugmentedReality;
 
+use stdClass;
+
 /**
  * Class Plugin
  *
@@ -36,33 +38,49 @@ class Plugin {
 	const TEXTDOMAIN = 'augmented-reality';
 
 	/**
-	 * The URL of the plugin.
+	 * The file path of the plugin.
 	 *
 	 * @var string
 	 */
-	public $plugin_url;
+	private $plugin_path;
 
 	/**
-	 * The instantiated classes of the plugin.
+	 * The directory of the plugin.
 	 *
-	 * @var \stdClass
+	 * @var string
 	 */
-	public $components;
+	private $plugin_dir;
 
 	/**
 	 * This plugin's PHP classes.
 	 *
 	 * @var array
 	 */
-	public $classes = [ 'Asset', 'Block' ];
+	private $classes = [ 'Asset', 'Block' ];
 
 	/**
-	 * Initiate the plugin.
+	 * The instantiated classes of the plugin.
+	 *
+	 * @var stdClass
+	 */
+	public $components;
+
+	/**
+	 * Plugin constructor.
+	 *
+	 * @param string $file_path The plugin's file path.
+	 */
+	public function __construct( $file_path ) {
+		$this->plugin_path = $file_path;
+		$this->plugin_dir  = dirname( $file_path );
+	}
+
+	/**
+	 * Initiates the plugin.
 	 */
 	public function init() {
-		$this->init_classes();
-		$this->plugin_url = plugins_url( self::SLUG );
 		add_action( 'init', [ $this, 'plugin_localization' ] );
+		$this->init_classes();
 	}
 
 	/**
@@ -71,17 +89,9 @@ class Plugin {
 	public function init_classes() {
 		$this->components = new \stdClass();
 		foreach ( $this->classes as $class ) {
-			$class_with_namespace = __NAMESPACE__ . '\\' . $class;
-
-			if ( class_exists( $class_with_namespace ) ) {
-				$this->components->$class = new $class_with_namespace( $this );
-			} else {
-				break;
-			}
-
-			if ( method_exists( $this->components->$class, 'init' ) ) {
-				$this->components->$class->init();
-			}
+			$class_with_namespace     = __NAMESPACE__ . '\\' . $class;
+			$this->components->$class = new $class_with_namespace( $this );
+			$this->components->$class->init();
 		}
 	}
 
@@ -91,6 +101,34 @@ class Plugin {
 	 * @return void.
 	 */
 	public function plugin_localization() {
-		load_plugin_textdomain( 'adapter-responsive-video', false, basename( dirname( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain( self::TEXTDOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages' );
+	}
+
+	/**
+	 * Gets the filesystem path of the plugin.
+	 *
+	 * @return string The path of the plugin.
+	 */
+	public function get_path() {
+		return $this->plugin_path;
+	}
+
+	/**
+	 * Gets the filesystem path of the plugin.
+	 *
+	 * @return string The path of the plugin.
+	 */
+	public function get_dir() {
+		return $this->plugin_dir;
+	}
+
+	/**
+	 * Gets the path of a script, given its slug.
+	 *
+	 * @param string $slug The slug of the script.
+	 * @return string The path of the script.
+	 */
+	public function get_script_path( $slug ) {
+		return plugins_url( "js/dist/{$slug}.js", $this->plugin_path );
 	}
 }

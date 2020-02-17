@@ -8,8 +8,9 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite>
-			<directory prefix="test-" suffix=".php">./tests/</directory>
+		<testsuite name="augmented-reality">
+			<directory prefix="Test" suffix=".php">./tests/</directory>
+			<exclude>./tests/php/TestCase.php</exclude>
 		</testsuite>
 	</testsuites>
 </phpunit>
