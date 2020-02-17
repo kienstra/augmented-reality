@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 /**
  * Internal dependencies
@@ -27,10 +27,7 @@ describe( 'Edit', () => {
 		[ 'https://foo.com', 'Edit model' ],
 		[ '', 'Model' ],
 	] )( 'displays the correct title, depending on whether there is a url', ( url, expectedTitle ) => {
-		setup( {
-			...baseProps,
-			attributes: { url },
-		} );
+		setup( { attributes: { url } } );
 
 		expect( screen.getByText( expectedTitle ) ).toBeInTheDocument();
 	} );
@@ -41,12 +38,7 @@ describe( 'Edit', () => {
 	} );
 
 	it( 'displays a preview of the model-viewer if there is a url', () => {
-		setup( {
-			...baseProps,
-			attributes: {
-				url: 'https://baz.com',
-			},
-		} );
+		setup( { attributes: { url: 'https://baz.com' } } );
 
 		const modelViewer = document.getElementsByTagName( 'model-viewer' );
 		expect( modelViewer ).toHaveLength( 1 );
