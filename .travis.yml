@@ -32,6 +32,7 @@ matrix:
       env: WP_TRAVISCI=lint
 
 install:
+  - npm install
   - composer install
 
 before_script:
@@ -68,5 +69,5 @@ script:
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      phpcs
+      npm run lint:php
     fi
