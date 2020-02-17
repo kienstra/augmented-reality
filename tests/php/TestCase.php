@@ -1,8 +1,8 @@
 <?php
 /**
- * Tests Case class.
+ * Test Case class.
  *
- * @package BlockScaffolding
+ * @package AugmentedReality
  */
 
 namespace AugmentedReality;

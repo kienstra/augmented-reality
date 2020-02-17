@@ -96,10 +96,10 @@ class TestBlock extends TestCase {
 	}
 
 	/**
-	 * Test render_block().
+	 * Test render_block.
 	 *
 	 * @dataProvider get_render_block_data
-	 * @covers \AugmentedReality\Block::render_block().
+	 * @covers \AugmentedReality\Block::render_block()
 	 *
 	 * @param array       $attributes The block attributes.
 	 * @param string|null $expected   The expected return value.

@@ -34,7 +34,7 @@ class TestPlugin extends TestCase {
 	/**
 	 * Test init().
 	 *
-	 * @covers Plugin::init().
+	 * @covers \AugmentedReality\Plugin::init()
 	 */
 	public function test_init() {
 		WP_Mock::expectActionAdded( 'init', [ $this->instance, 'plugin_localization' ] );
@@ -43,9 +43,9 @@ class TestPlugin extends TestCase {
 	}
 
 	/**
-	 * Test init_classes().
+	 * Test init_classes.
 	 *
-	 * @covers Plugin::init_classes().
+	 * @covers \AugmentedReality\Plugin::init_classes()
 	 */
 	public function test_init_classes() {
 		$this->instance->init_classes();
@@ -68,7 +68,7 @@ class TestPlugin extends TestCase {
 	}
 
 	/**
-	 * Test get_path
+	 * Test get_path.
 	 *
 	 * @covers \AugmentedReality\Plugin::get_path()
 	 */
@@ -77,7 +77,7 @@ class TestPlugin extends TestCase {
 	}
 
 	/**
-	 * Test get_dir
+	 * Test get_dir.
 	 *
 	 * @covers \AugmentedReality\Plugin::get_dir()
 	 */
@@ -87,7 +87,7 @@ class TestPlugin extends TestCase {
 
 
 	/**
-	 * Test get_script_path
+	 * Test get_script_path.
 	 *
 	 * @covers \AugmentedReality\Plugin::get_script_path()
 	 */
