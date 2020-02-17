@@ -32,8 +32,9 @@ matrix:
       env: WP_TRAVISCI=lint
 
 install:
-  - npm install
   - composer install
+  - npm install
+  - npm run dev
 
 before_script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"

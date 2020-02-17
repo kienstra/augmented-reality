@@ -1,8 +1,9 @@
 <?php
 /**
- * Bootstrap PHPUnit related dependencies.
+ * Test bootstrap file.
  *
- * @package BlockScaffolding
+ * @package AugmentedReality
  */
 
+require_once '../vendor/autoload.php';
 WP_Mock::bootstrap();
