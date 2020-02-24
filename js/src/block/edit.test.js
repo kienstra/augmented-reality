@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-import '@testing-library/jest-dom/extend-expect';
-import { render, screen } from '@testing-library/react';
+import { mount } from 'enzyme';
 
 /**
  * Internal dependencies
@@ -20,37 +19,37 @@ jest.mock( '@wordpress/block-editor', () => {
 
 const baseProps = { attributes: {} };
 const setup = ( props ) => {
-	return render( <Edit { ...props } /> );
+	return mount( <Edit { ...props } /> );
 };
 
 describe( 'Edit', () => {
-	it( 'displays the color pallete text', () => {
-		setup( baseProps );
-		expect( screen.getByText( 'Background Color' ) ).toBeInTheDocument();
+	it( 'displays the color palette text', () => {
+		const rendered = setup( baseProps );
+		expect( rendered.contains( 'Background Color' ) ).toEqual( true );
 	} );
 
 	it( 'displays the instructions, even if there is no url or id', () => {
-		setup( baseProps );
-		expect( screen.getByText( 'Upload a model file, or choose one from your media library' ) ).toBeInTheDocument();
+		const rendered = setup( baseProps );
+		expect( rendered.contains( 'Upload a model file, or choose one from your media library' ) ).toEqual( true );
 	} );
 
 	it.each( [
 		[ 'https://foo.com', 'Edit model' ],
 		[ '', 'Model' ],
 	] )( 'displays the correct title, depending on whether there is a url', ( url, expectedTitle ) => {
-		setup( { attributes: { url } } );
-		expect( screen.getByText( expectedTitle ) ).toBeInTheDocument();
+		const rendered = setup( { attributes: { url } } );
+		expect( rendered.contains( expectedTitle ) ).toEqual( true );
 	} );
 
 	it( 'does not display a preview of the model-viewer if there is no url', () => {
-		setup( baseProps );
-		expect( document.getElementsByTagName( 'model-viewer' ) ).toHaveLength( 0 );
+		const rendered = setup( baseProps );
+		expect( rendered.find( 'model-viewer' ) ).toHaveLength( 0 );
 	} );
 
 	it( 'displays a preview of the model-viewer if there is a url', () => {
-		setup( { attributes: { url: 'https://baz.com' } } );
+		const rendered = setup( { attributes: { url: 'https://baz.com' } } );
 
-		const modelViewer = document.getElementsByTagName( 'model-viewer' );
+		const modelViewer = rendered.find( 'model-viewer' );
 		expect( modelViewer ).toHaveLength( 1 );
 	} );
 } );
