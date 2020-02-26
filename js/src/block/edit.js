@@ -2,13 +2,13 @@
  * WordPress dependencies
  */
 import { ColorPalette, InspectorControls, MediaPlaceholder } from '@wordpress/block-editor';
-import { ExternalLink, PanelBody, TextAreaControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
  * The Edit component for the block.
  */
-const Edit = ( { attributes: { alt, autoRotate, backgroundColor, className, id, url }, instanceId, setAttributes } ) => {
+const Edit = ( { attributes: { autoRotate, backgroundColor, className, id, url }, instanceId, setAttributes } ) => {
 	const labels = {
 		title: !! url ? __( 'Edit model', 'augmented-reality' ) : __( 'Model', 'augmented-reality' ),
 		instructions: __( 'Upload a model file, or choose one from your media library', 'augmented-reality' ),

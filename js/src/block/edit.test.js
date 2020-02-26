@@ -9,7 +9,7 @@ import { render, screen } from '@testing-library/react';
  */
 import Edit from './edit';
 
-// Mock the <InpectorControls> component only, so that the other components in this package behave as usual.
+// Mocks the <InpectorControls> component only, so that the other components in this package behave as usual.
 jest.mock( '@wordpress/block-editor', () => {
 	const original = require.requireActual( '@wordpress/block-editor' );
 	return {
@@ -18,11 +18,23 @@ jest.mock( '@wordpress/block-editor', () => {
 	};
 } );
 
-const baseProps = { attributes: {} };
+/**
+ * Sets up the test by rendering the component.
+ *
+ * @param {Object} props The props to pass to the component.
+ */
 const setup = ( props ) => {
-	return render( <Edit { ...props } /> );
+	render( <Edit { ...props } /> );
 };
+
+/**
+ * Gets the model-viewer web component.
+ *
+ * @return {Object} The model-viewer web component.
+ */
 const getModelViewer = () => document.querySelector( 'model-viewer' );
+
+const baseProps = { attributes: {} };
 
 describe( 'Edit', () => {
 	it.each( [
@@ -46,7 +58,7 @@ describe( 'Edit', () => {
 		setup( { attributes: { backgroundColor, url: 'https://baz.com' } } );
 		expect( getModelViewer().getAttribute( 'background-color' ) ).toEqual( backgroundColor );
 	} );
- 
+
 	it( 'displays the background color label', () => {
 		setup( baseProps );
 		expect( screen.getByText( 'Background Color' ) ).toBeInTheDocument();
