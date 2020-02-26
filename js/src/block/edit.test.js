@@ -9,7 +9,7 @@ import { render, screen } from '@testing-library/react';
  */
 import Edit from './edit';
 
-// Mock the <InpectorControls> component only, so that the other components in this package behave as usual.
+// Mocks the <InpectorControls> component only, so that the other components in this package behave as usual.
 jest.mock( '@wordpress/block-editor', () => {
 	const original = require.requireActual( '@wordpress/block-editor' );
 	return {
@@ -18,20 +18,31 @@ jest.mock( '@wordpress/block-editor', () => {
 	};
 } );
 
-const baseProps = { attributes: {} };
+/**
+ * Sets up the test by rendering the component.
+ *
+ * @param {Object} props The props to pass to the component.
+ */
 const setup = ( props ) => {
-	return render( <Edit { ...props } /> );
+	render( <Edit { ...props } /> );
 };
 
-describe( 'Edit', () => {
-	it( 'displays the color pallete text', () => {
-		setup( baseProps );
-		expect( screen.getByText( 'Background Color' ) ).toBeInTheDocument();
-	} );
+/**
+ * Gets the model-viewer web component.
+ *
+ * @return {Object} The model-viewer web component.
+ */
+const getModelViewer = () => document.querySelector( 'model-viewer' );
 
-	it( 'displays the instructions, even if there is no url or id', () => {
-		setup( baseProps );
-		expect( screen.getByText( 'Upload a model file, or choose one from your media library' ) ).toBeInTheDocument();
+const baseProps = { attributes: {} };
+
+describe( 'Edit', () => {
+	it.each( [
+		[ '', 0 ],
+		[ 'https://baz.com', 1 ],
+	] )( 'only displays a preview of the model-viewer if there is a url', ( url, lengthOfFoundTags ) => {
+		setup( { attributes: { url } } );
+		expect( document.getElementsByTagName( 'model-viewer' ) ).toHaveLength( lengthOfFoundTags );
 	} );
 
 	it.each( [
@@ -42,15 +53,24 @@ describe( 'Edit', () => {
 		expect( screen.getByText( expectedTitle ) ).toBeInTheDocument();
 	} );
 
-	it( 'does not display a preview of the model-viewer if there is no url', () => {
-		setup( baseProps );
-		expect( document.getElementsByTagName( 'model-viewer' ) ).toHaveLength( 0 );
+	it( 'has the background-color attribute in the model-viewer component when it exists', () => {
+		const backgroundColor = '#cd2653';
+		setup( { attributes: { backgroundColor, url: 'https://baz.com' } } );
+		expect( getModelViewer().getAttribute( 'background-color' ) ).toEqual( backgroundColor );
 	} );
 
-	it( 'displays a preview of the model-viewer if there is a url', () => {
-		setup( { attributes: { url: 'https://baz.com' } } );
+	it( 'displays the background color label', () => {
+		setup( baseProps );
+		expect( screen.getByText( 'Background Color' ) ).toBeInTheDocument();
+	} );
 
-		const modelViewer = document.getElementsByTagName( 'model-viewer' );
-		expect( modelViewer ).toHaveLength( 1 );
+	it( 'has an auto-rotate attribute in the model-viewer component when autoRotate is true', () => {
+		setup( { attributes: { url: 'https://baz.com', autoRotate: true } } );
+		expect( getModelViewer().hasAttribute( 'auto-rotate' ) ).toEqual( true );
+	} );
+
+	it( 'displays the media instructions, even if there is no url or id', () => {
+		setup( baseProps );
+		expect( screen.getByText( 'Upload a model file, or choose one from your media library' ) ).toBeInTheDocument();
 	} );
 } );
