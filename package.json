@@ -35,7 +35,7 @@
     "eslint-plugin-import": "2.20.1",
     "husky": "^4.2.3",
     "react": "16.13.1",
-    "webpack": "4.42.0",
+    "webpack": "4.42.1",
     "webpack-cli": "3.3.11",
     "webpackbar": "4.0.0"
   },
