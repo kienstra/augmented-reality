@@ -24,7 +24,7 @@
     "@google/model-viewer": "0.9.0",
     "@testing-library/jest-dom": "5.1.1",
     "@testing-library/react": "10.0.1",
-    "@wordpress/components": "9.2.4",
+    "@wordpress/components": "9.2.6",
     "@wordpress/dom-ready": "2.7.0",
     "@wordpress/editor": "9.12.5",
     "@wordpress/eslint-plugin": "3.3.0",
