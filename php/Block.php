@@ -99,7 +99,7 @@ class Block {
 	}
 
 	/**
-	 * Allow .obj and .mtl files, as they normally are not allowed.
+	 * Allow uploading a .gbl file, as it's normally not allowed.
 	 *
 	 * @param array  $wp_check_filetype_and_ext {
 	 *      The file data.
@@ -113,10 +113,7 @@ class Block {
 	 * @return array The filtered file data.
 	 */
 	public function check_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filename ) {
-		$is_gbl        = preg_match( '/\.glb$/', $filename );
-		$do_allow_file = $is_gbl && extension_loaded( 'fileinfo' );
-
-		if ( ! $do_allow_file ) {
+		if ( ! preg_match( '/\.glb$/', $filename ) || ! extension_loaded( 'fileinfo' ) ) {
 			return $wp_check_filetype_and_ext;
 		}
 
