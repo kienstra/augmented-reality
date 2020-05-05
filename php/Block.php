@@ -42,6 +42,7 @@ class Block {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'register_block' ] );
+		add_action( 'wp_check_filetype_and_ext', [ $this, 'check_filetype_and_ext' ], 10, 3 );
 	}
 
 	/**
@@ -95,5 +96,38 @@ class Block {
 
 		$this->plugin->components->Asset->enqueue_script( Asset::MODEL_VIEWER_JS_SLUG );
 		return ob_get_clean();
+	}
+
+	/**
+	 * Allow .obj and .mtl files, as they normally are not allowed.
+	 *
+	 * @param array  $wp_check_filetype_and_ext {
+	 *      The file data.
+	 *
+	 *     @type string    $ext The file extension.
+	 *     @type string    $type The file type.
+	 *     @type string    $proper_filename The proper file name.
+	 * }
+	 * @param string $file The full path of the file.
+	 * @param string $filename The file name.
+	 * @return array The filtered file data.
+	 */
+	public function check_filetype_and_ext( $wp_check_filetype_and_ext, $file, $filename ) {
+		$is_gbl        = preg_match( '/\.glb$/', $filename );
+		$do_allow_file = $is_gbl && extension_loaded( 'fileinfo' );
+
+		if ( ! $do_allow_file ) {
+			return $wp_check_filetype_and_ext;
+		}
+
+		$finfo     = finfo_open( FILEINFO_MIME_TYPE );
+		$real_mime = finfo_file( $finfo, $file );
+		finfo_close( $finfo );
+
+		// .glf files can have this as an actual mime_type, so allow this.
+		$wp_check_filetype_and_ext['ext']  = 'glb';
+		$wp_check_filetype_and_ext['type'] = 'application/octet-stream';
+
+		return $wp_check_filetype_and_ext;
 	}
 }
