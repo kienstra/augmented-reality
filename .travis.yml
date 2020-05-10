@@ -12,7 +12,7 @@ cache:
 services:
   - mysql
 
-  matrix:
+matrix:
   include:
     - php: 7.4snapshot
       env: WP_TRAVISCI=test-php
