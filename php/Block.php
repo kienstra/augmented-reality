@@ -43,6 +43,7 @@ class Block {
 	public function init() {
 		add_action( 'init', [ $this, 'register_block' ] );
 		add_action( 'wp_check_filetype_and_ext', [ $this, 'check_filetype_and_ext' ], 10, 3 );
+		add_filter( 'upload_mimes', [ $this, 'add_mime_type' ] );
 	}
 
 	/**
@@ -102,7 +103,7 @@ class Block {
 	 * Allow uploading a .gbl file, as it's normally not allowed.
 	 *
 	 * @param array  $wp_check_filetype_and_ext {
-	 *      The file data.
+	 *     The file data.
 	 *
 	 *     @type string    $ext The file extension.
 	 *     @type string    $type The file type.
@@ -126,5 +127,19 @@ class Block {
 		$wp_check_filetype_and_ext['type'] = 'application/octet-stream';
 
 		return $wp_check_filetype_and_ext;
+	}
+
+	/**
+	 * Add the MIME type for the model.
+	 *
+	 * @param array $mimes The allowed MIME types.
+	 * @return array $mimes The MIME types, possibly with one added.
+	 */
+	public function add_mime_type( $mimes ) {
+		if ( current_user_can( 'edit_posts' ) ) {
+			$mimes['glb'] = 'model/gltf+json';
+		}
+
+		return $mimes;
 	}
 }

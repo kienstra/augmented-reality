@@ -13,6 +13,7 @@ const Edit = ( { attributes: { autoRotate, backgroundColor, className, id, url }
 		title: !! url ? __( 'Edit model', 'augmented-reality' ) : __( 'Model', 'augmented-reality' ),
 		instructions: __( 'Upload a model file, or choose one from your media library', 'augmented-reality' ),
 	};
+	const allowedMimeTypes = [ 'application/glb', 'model/gltf+json' ];
 
 	return (
 		<>
@@ -39,7 +40,8 @@ const Edit = ( { attributes: { autoRotate, backgroundColor, className, id, url }
 			</InspectorControls>
 			<div className={ className }>
 				<MediaPlaceholder
-					allowedTypes={ [ 'application/glb' ] }
+					accept={ allowedMimeTypes.join() }
+					allowedTypes={ allowedMimeTypes }
 					onSelect={ ( newMedia ) => {
 						setAttributes( {
 							url: newMedia.url,
