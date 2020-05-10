@@ -112,4 +112,29 @@ class TestBlock extends TestCase {
 
 		$this->assertEquals( $expected, $actual );
 	}
+
+	/**
+	 * Test add_mime_type.
+	 *
+	 * @covers \AugmentedReality\Block::add_mime_type()
+	 */
+	public function test_add_mime_type() {
+		WP_Mock::userFunction( 'current_user_can' )
+			->once()
+			->with( 'edit_posts' )
+			->andReturn( true );
+
+		$original_mime_types = [
+			'jpeg' => 'image/jpeg',
+			'png'  => 'image/png',
+		];
+
+		$this->assertEquals(
+			array_merge(
+				$original_mime_types,
+				[ 'glb' => 'model/gltf+json' ]
+			),
+			$this->instance->add_mime_type( $original_mime_types )
+		);
+	}
 }
