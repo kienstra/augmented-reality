@@ -38,5 +38,6 @@ export const compareToScreenshot = async () => {
 		allowSizeMismatch: true,
 		failureThresholdType: 'percent',
 		failureThreshold: 0.05, // 5% of pixels can differ before this test will fail.
+		dumpDiffToConsole: process.env.CI, // In a failed test in CI, display a base64 of the diff, as there's no other way to see it.
 	} );
 };
