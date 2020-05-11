@@ -17,7 +17,10 @@ import {
 /**
  * Internal dependencies
  */
-import { insertBlockFromInserter } from '../helpers';
+import {
+	compareToScreenshot,
+	insertBlockFromInserter,
+} from '../helpers';
 
 test( 'ar-viewer block', async () => {
 	const blockName = 'AR Viewer';
@@ -33,6 +36,7 @@ test( 'ar-viewer block', async () => {
 	const instructions = 'Upload a model file, or choose one from your media library';
 	const label = 'Model';
 
+	await compareToScreenshot( 'augmented-reality/ar-viewer' );
 	expect( placeholder ).toContain( instructions );
 	expect( placeholder ).toContain( label );
 
@@ -65,5 +69,5 @@ test( 'ar-viewer block', async () => {
 	// The <model-viewer> component should now render, and the placeholder should have 'Edit Model'.
 	await page.waitForSelector( 'model-viewer' );
 	const placeholderWithEdit = await page.$eval( placeholderSelector, ( element ) => element.textContent );
-	await expect( placeholderWithEdit ).toContain( 'Edit model' );
+	expect( placeholderWithEdit ).toContain( 'Edit model' );
 } );

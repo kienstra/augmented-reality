@@ -8,6 +8,7 @@
  * External dependencies
  */
 import { get } from 'lodash';
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
 /**
  * WordPress dependencies
@@ -54,6 +55,8 @@ const pageEvents = [];
 
 // The Jest timeout is increased because these tests are a bit slow
 jest.setTimeout( PUPPETEER_TIMEOUT || 100000 );
+
+expect.extend( { toMatchImageSnapshot } );
 
 async function setupBrowser() {
 	await setBrowserViewport( 'large' );
