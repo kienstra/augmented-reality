@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { ColorPalette, InspectorControls, MediaPlaceholder } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl } from '@wordpress/components';
+import { Notice, PanelBody, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -39,6 +39,9 @@ const Edit = ( { attributes: { autoRotate, backgroundColor, className, id, url }
 				</PanelBody>
 			</InspectorControls>
 			<div className={ className }>
+				<Notice status="error">
+					{ __( 'Something happened', 'augmented-reality' ) }
+				</Notice>
 				<MediaPlaceholder
 					accept={ allowedMimeTypes.join() }
 					allowedTypes={ allowedMimeTypes }
