@@ -61,8 +61,8 @@ class Block {
 						'id'              => [
 							'type' => 'number',
 						],
-						'backgroudnColor' => [
-							'tyep' => 'string',
+						'backgroundColor' => [
+							'type' => 'string',
 						],
 					],
 					'render_callback' => [ $this, 'render_block' ],
