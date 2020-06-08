@@ -5,14 +5,12 @@ import path from 'path';
 import fs from 'fs';
 import os from 'os';
 import uuid from 'uuid/v4';
+import { getDocument, queries } from 'pptr-testing-library';
 
 /**
  * WordPress dependencies
  */
-import {
-	clickButton,
-	createNewPost,
-} from '@wordpress/e2e-test-utils';
+import { createNewPost } from '@wordpress/e2e-test-utils';
 
 /**
  * Internal dependencies
@@ -22,6 +20,8 @@ import {
 	insertBlockFromInserter,
 } from '../helpers';
 
+const { getByLabelText, getAllByText } = queries;
+
 test( 'ar-viewer block', async () => {
 	const blockName = 'AR Viewer';
 
@@ -30,22 +30,15 @@ test( 'ar-viewer block', async () => {
 	await insertBlockFromInserter( blockName );
 	await page.waitForSelector( '.wp-block' );
 
-	// The block should have the Text field.
-	const placeholderSelector = '.components-placeholder';
-	const placeholder = await page.$eval( placeholderSelector, ( element ) => element.textContent );
-	const instructions = 'Upload a model file, or choose one from your media library';
-	const label = 'Model';
-
+	const document = await getDocument( page );
+	const block = await getByLabelText( document, `Block: ${ blockName }` );
 	await compareToScreenshot( 'augmented-reality/ar-viewer' );
-	expect( placeholder ).toContain( instructions );
-	expect( placeholder ).toContain( label );
+
+	// The block should have the text 'model' in it.
+	getAllByText( block, /model/i );
 
 	// Mainly taken from adding-inline-tokens.test.js in Gutenberg.
-	// Open the Media Library to upload a .glb file.
-	await clickButton( 'Media Library' );
-	const inputSelector = '.media-modal input[type=file]';
-	await page.waitForSelector( inputSelector );
-	const input = await page.$( inputSelector );
+	const fileInput = await block.$( 'input[type="file"]' );
 
 	// Fox.glb by PixelMannen is licensed under CC0.
 	// https://github.com/KhronosGroup/glTF-Sample-Models/tree/5aec133dbaf543f9bcb6cb79de9966bf9530c2fe/2.0/Fox
@@ -61,13 +54,12 @@ test( 'ar-viewer block', async () => {
 	fs.copyFileSync( testImagePath, tmpFileName );
 
 	// Upload a .glb file to the Media Library and insert it into the block.
-	await input.uploadFile( tmpFileName );
-	const buttonSelector = '.media-button-select:not([disabled])';
-	await page.waitForSelector( buttonSelector );
-	await page.click( buttonSelector );
+	await fileInput.uploadFile( tmpFileName );
 
 	// The <model-viewer> component should now render, and the placeholder should have 'Edit Model'.
 	await page.waitForSelector( 'model-viewer' );
-	const placeholderWithEdit = await page.$eval( placeholderSelector, ( element ) => element.textContent );
-	expect( placeholderWithEdit ).toContain( 'Edit model' );
+	expect( block ).toMatch( 'Edit model' );
+
+	await getByLabelText( document, /auto-rotate/i );
+	await getByLabelText( document, /background color/i );
 } );
