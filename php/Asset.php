@@ -77,7 +77,7 @@ class Asset {
 	 */
 	public function enqueue_script( $slug ) {
 		$config = $this->get_script_config( self::MODEL_VIEWER_JS_SLUG );
-		\wp_enqueue_script(
+		wp_enqueue_script(
 			$this->get_prefixed_slug( $slug ),
 			$this->plugin->get_script_path( $slug ),
 			$config['dependencies'],

@@ -87,7 +87,7 @@ class Plugin {
 	 * Inits the plugin classes.
 	 */
 	public function init_classes() {
-		$this->components = new \stdClass();
+		$this->components = new stdClass();
 		foreach ( $this->classes as $class ) {
 			$class_with_namespace     = __NAMESPACE__ . '\\' . $class;
 			$this->components->$class = new $class_with_namespace( $this );
