@@ -20,7 +20,7 @@ export const insertBlockFromInserter = async ( blockName ) => {
 	await page.keyboard.type( blockName );
 	const insertButton = (
 		await page.$x( `//button//span[contains(text(), '${ blockName }')]` )
-	)[ 0 ];
+	 )[ 0 ];
 	await insertButton.click();
 };
 
@@ -31,7 +31,9 @@ export const insertBlockFromInserter = async ( blockName ) => {
  * Has a threshold of 5% to accomodate differences in non-headless, and minor changes to components.
  */
 export const compareToScreenshot = async () => {
-	const editor = await page.waitForSelector( '.block-editor-editor-skeleton__body' );
+	const editor = await page.waitForSelector(
+		'.block-editor-editor-skeleton__body'
+	);
 	const blockScreenshot = await editor.screenshot();
 
 	expect( blockScreenshot ).toMatchImageSnapshot( {

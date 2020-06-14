@@ -9,18 +9,12 @@ import uuid from 'uuid/v4';
 /**
  * WordPress dependencies
  */
-import {
-	clickButton,
-	createNewPost,
-} from '@wordpress/e2e-test-utils';
+import { clickButton, createNewPost } from '@wordpress/e2e-test-utils';
 
 /**
  * Internal dependencies
  */
-import {
-	compareToScreenshot,
-	insertBlockFromInserter,
-} from '../helpers';
+import { compareToScreenshot, insertBlockFromInserter } from '../helpers';
 
 test( 'ar-viewer block', async () => {
 	const blockName = 'AR Viewer';
@@ -32,8 +26,12 @@ test( 'ar-viewer block', async () => {
 
 	// The block should have the Text field.
 	const placeholderSelector = '.components-placeholder';
-	const placeholder = await page.$eval( placeholderSelector, ( element ) => element.textContent );
-	const instructions = 'Upload a model file, or choose one from your media library';
+	const placeholder = await page.$eval(
+		placeholderSelector,
+		( element ) => element.textContent
+	);
+	const instructions =
+		'Upload a model file, or choose one from your media library';
 	const label = 'Model';
 
 	await compareToScreenshot( 'augmented-reality/ar-viewer' );
@@ -50,12 +48,7 @@ test( 'ar-viewer block', async () => {
 	// Fox.glb by PixelMannen is licensed under CC0.
 	// https://github.com/KhronosGroup/glTF-Sample-Models/tree/5aec133dbaf543f9bcb6cb79de9966bf9530c2fe/2.0/Fox
 	// https://creativecommons.org/publicdomain/zero/1.0/
-	const testImagePath = path.join(
-		__dirname,
-		'..',
-		'assets',
-		'Fox.glb'
-	);
+	const testImagePath = path.join( __dirname, '..', 'assets', 'Fox.glb' );
 	const filename = uuid();
 	const tmpFileName = path.join( os.tmpdir(), filename + '.glb' );
 	fs.copyFileSync( testImagePath, tmpFileName );
@@ -68,6 +61,9 @@ test( 'ar-viewer block', async () => {
 
 	// The <model-viewer> component should now render, and the placeholder should have 'Edit Model'.
 	await page.waitForSelector( 'model-viewer' );
-	const placeholderWithEdit = await page.$eval( placeholderSelector, ( element ) => element.textContent );
+	const placeholderWithEdit = await page.$eval(
+		placeholderSelector,
+		( element ) => element.textContent
+	);
 	expect( placeholderWithEdit ).toContain( 'Edit model' );
 } );
