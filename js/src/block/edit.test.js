@@ -40,23 +40,33 @@ describe( 'Edit', () => {
 	it.each( [
 		[ '', 0 ],
 		[ 'https://baz.com', 1 ],
-	] )( 'only displays a preview of the model-viewer if there is a url', ( url, lengthOfFoundTags ) => {
-		setup( { attributes: { url } } );
-		expect( document.getElementsByTagName( 'model-viewer' ) ).toHaveLength( lengthOfFoundTags );
-	} );
+	] )(
+		'only displays a preview of the model-viewer if there is a url',
+		( url, lengthOfFoundTags ) => {
+			setup( { attributes: { url } } );
+			expect(
+				document.getElementsByTagName( 'model-viewer' )
+			).toHaveLength( lengthOfFoundTags );
+		}
+	);
 
 	it.each( [
 		[ 'https://foo.com', 'Edit model' ],
 		[ '', 'Model' ],
-	] )( 'displays the correct title, depending on whether there is a url', ( url, expectedTitle ) => {
-		setup( { attributes: { url } } );
-		expect( screen.getByText( expectedTitle ) ).toBeInTheDocument();
-	} );
+	] )(
+		'displays the correct title, depending on whether there is a url',
+		( url, expectedTitle ) => {
+			setup( { attributes: { url } } );
+			expect( screen.getByText( expectedTitle ) ).toBeInTheDocument();
+		}
+	);
 
 	it( 'has the background-color attribute in the model-viewer component when it exists', () => {
 		const backgroundColor = '#cd2653';
 		setup( { attributes: { backgroundColor, url: 'https://baz.com' } } );
-		expect( getModelViewer().getAttribute( 'background-color' ) ).toEqual( backgroundColor );
+		expect( getModelViewer().getAttribute( 'background-color' ) ).toEqual(
+			backgroundColor
+		);
 	} );
 
 	it( 'displays the background color label', () => {
@@ -66,11 +76,17 @@ describe( 'Edit', () => {
 
 	it( 'has an auto-rotate attribute in the model-viewer component when autoRotate is true', () => {
 		setup( { attributes: { url: 'https://baz.com', autoRotate: true } } );
-		expect( getModelViewer().hasAttribute( 'auto-rotate' ) ).toEqual( true );
+		expect( getModelViewer().hasAttribute( 'auto-rotate' ) ).toEqual(
+			true
+		);
 	} );
 
 	it( 'displays the media instructions, even if there is no url or id', () => {
 		setup( baseProps );
-		expect( screen.getByText( 'Upload a model file, or choose one from your media library' ) ).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				'Upload a model file, or choose one from your media library'
+			)
+		).toBeInTheDocument();
 	} );
 } );
