@@ -2,8 +2,9 @@
 	"root": true,
 	"extends": [
 		"plugin:@wordpress/eslint-plugin/recommended",
+		"plugin:eslint-comments/recommended",
 		"plugin:import/recommended",
-		"plugin:eslint-comments/recommended"
+		"plugin:jsdoc/recommended"
 	],
 	"globals": {
 		"wp": "readonly"
@@ -33,17 +34,18 @@
 			],
 			"rules": {
 				"jest/lowercase-name": [
-				"error",
-				{
-					"ignore": [
-					"describe"
-					]
-				}
+					"error",
+					{
+						"ignore": [
+						"describe"
+						]
+					}
 				],
 				"jest/no-hooks": "off",
 				"jest/require-top-level-describe": "off",
 				"jest/prefer-expect-assertions": "off",
-				"jest/prefer-inline-snapshots": "off"
+				"jest/prefer-inline-snapshots": "off",
+				"jsdoc/check-access": "off"
 			}
 		}
 	]
