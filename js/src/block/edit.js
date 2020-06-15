@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * WordPress dependencies
  */
@@ -11,10 +13,13 @@ import { __ } from '@wordpress/i18n';
 
 /**
  * The Edit component for the block.
+ *
+ * @param {{attributes: {autoRotate: boolean, backgroundColor: string, className: string, id: number, url: string}, clientId: string, setAttributes: Function}} props Component props.
+ * @return {Object} The component to render the block in the block editor.
  */
 const Edit = ( {
 	attributes: { autoRotate, backgroundColor, className, id, url },
-	instanceId,
+	clientId,
 	setAttributes,
 } ) => {
 	const labels = {
@@ -34,26 +39,25 @@ const Edit = ( {
 				<PanelBody
 					title={ __( 'Model Settings', 'augmented-reality' ) }
 				>
-					<label htmlFor={ `mv-background-color-${ instanceId }` }>
+					<label htmlFor={ `mv-background-color-${ clientId }` }>
 						{ __( 'Background Color', 'augmented-reality' ) }
 					</label>
 					<ColorPalette
-						id={ `mv-background-color-${ instanceId }` }
+						id={ `mv-background-color-${ clientId }` }
 						label={ __( 'Background Color', 'augmented-reality' ) }
 						onChange={ ( newColor ) =>
 							setAttributes( { backgroundColor: newColor } )
 						}
+						// @ts-ignore
 						value={ backgroundColor }
 					/>
 					<ToggleControl
 						checked={ autoRotate }
-						id={ `mv-auto-rotate-${ instanceId }` }
 						onChange={ ( newValue ) =>
 							setAttributes( { autoRotate: newValue } )
 						}
-						style={ { 'margin-top': '20px' } }
 						label={ __( 'Auto-rotate', 'augmented-reality' ) }
-					></ToggleControl>
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<div className={ className }>
@@ -70,12 +74,13 @@ const Edit = ( {
 					labels={ labels }
 					mediaPreview={
 						!! url && (
+							// @ts-ignore
 							<model-viewer
 								src={ url }
 								background-color={ backgroundColor }
 								camera-controls
 								auto-rotate={ autoRotate }
-							></model-viewer>
+							/>
 						)
 					}
 					onSelectURL={ ( newUrl ) => {
@@ -86,7 +91,7 @@ const Edit = ( {
 							} );
 						}
 					} }
-					value={ { id, url } }
+					value={ id }
 				/>
 			</div>
 		</>

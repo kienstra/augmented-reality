@@ -58,6 +58,9 @@ jest.setTimeout( PUPPETEER_TIMEOUT || 100000 );
 
 expect.extend( { toMatchImageSnapshot } );
 
+/**
+ * Sets up the browser.
+ */
 async function setupBrowser() {
 	await setBrowserViewport( 'large' );
 }
