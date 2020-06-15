@@ -48,8 +48,5 @@
 				"jsdoc/check-access": "off"
 			}
 		}
-	],
-	"plugins": [
-		"jsdoc"
 	]
 }
