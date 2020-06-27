@@ -34,6 +34,9 @@ export default registerBlockType( 'augmented-reality/ar-viewer', {
 		backgroundColor: {
 			type: 'string',
 		},
+		className: {
+			type: 'string',
+		},
 	},
 
 	/**
@@ -47,7 +50,7 @@ export default registerBlockType( 'augmented-reality/ar-viewer', {
 	 * @see Block::render_block().
 	 * @return {null} Rendered in PHP.
 	 */
-	save() {
+	save: (): null => {
 		return null;
 	},
 } );
