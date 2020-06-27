@@ -5,9 +5,6 @@
 		"plugin:import/recommended",
 		"plugin:eslint-comments/recommended"
 	],
-	"globals": {
-		"wp": "readonly"
-	},
 	"rules": {
 		"@wordpress/dependency-group": "error",
 		"@wordpress/react-no-unsafe-timeout": "error",
@@ -36,7 +33,7 @@
 				"error",
 				{
 					"ignore": [
-					"describe"
+						"describe"
 					]
 				}
 				],
@@ -45,6 +42,36 @@
 				"jest/prefer-expect-assertions": "off",
 				"jest/prefer-inline-snapshots": "off"
 			}
+		},
+		{
+			"files": [
+				"js/src/**/*.ts",
+				"js/src/**/*.tsx"
+			],
+			"extends": [
+				"plugin:@typescript-eslint/recommended"
+			],
+			"rules": {
+				"@typescript-eslint/no-namespace": "off",
+				"@typescript-eslint/ban-ts-comment": "off"
+			}
 		}
-	]
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module"
+	},
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [
+					".js",
+					".jsx",
+					".ts",
+					".tsx"
+				]
+			}
+		}
+	},
 }
