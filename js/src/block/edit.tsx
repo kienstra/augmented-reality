@@ -48,7 +48,7 @@ interface BlockAttributes {
 const Edit: React.ComponentType< BlockEditProps< BlockAttributes > > = ( {
 	attributes: { autoRotate, backgroundColor, className, id, url },
 	setAttributes,
-} ) => {
+}: BlockEditProps< BlockAttributes > ) => {
 	const labels = {
 		title: !! url
 			? __( 'Edit model', 'augmented-reality' )
