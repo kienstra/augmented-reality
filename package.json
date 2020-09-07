@@ -21,7 +21,7 @@
     "test": "tests"
   },
   "devDependencies": {
-    "@google/model-viewer": "0.10.0",
+    "@google/model-viewer": "1.2.1",
     "@testing-library/jest-dom": "5.10.1",
     "@testing-library/react": "10.2.1",
     "@wordpress/api-fetch": "3.16.0",
