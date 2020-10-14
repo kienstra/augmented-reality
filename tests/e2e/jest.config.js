@@ -6,5 +6,6 @@ module.exports = {
 		'@wordpress/jest-puppeteer-axe',
 		'expect-puppeteer',
 	],
+	testEnvironment: '<rootDir>/config/error-capture-environment.js',
 	testPathIgnorePatterns: [ '/node_modules/' ],
 };
