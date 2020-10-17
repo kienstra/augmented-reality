@@ -13,7 +13,7 @@ module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
 	async teardown() {
 		const screenshotPath = path.join(
 			__dirname,
-			'../final-screenshot.jpg'
+			'../failure-screenshot.jpg'
 		);
 		const screenshotType = 'jpeg';
 
