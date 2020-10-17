@@ -1,6 +1,4 @@
 class ErrorLog {
-	log;
-
 	constructor() {
 		this.log = '';
 	}
