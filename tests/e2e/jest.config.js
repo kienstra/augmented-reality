@@ -7,6 +7,6 @@ module.exports = {
 		'expect-puppeteer',
 	],
 	testEnvironment: '<rootDir>/config/error-capture-environment.js',
-	reporters: [ 'default', '<rootDir>/config/error-capture-reporter.js' ],
+	reporters: [ '<rootDir>/config/error-capture-reporter.js' ],
 	testPathIgnorePatterns: [ '/node_modules/' ],
 };

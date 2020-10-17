@@ -14,7 +14,8 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		if ( testResult.numFailingTests !== 0 || testResult.failureMessage ) {
 			// eslint-disable-next-line no-console
 			console.log( errorLog.get() );
-			super.onTestResult( ...args );
 		}
+
+		super.onTestResult( ...args );
 	}
 };
