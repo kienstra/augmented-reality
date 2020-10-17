@@ -3,7 +3,7 @@ class ErrorLog {
 		this.log = '';
 	}
 
-	addToLog( message ) {
+	add( message ) {
 		this.log += `\n${ message }`;
 	}
 

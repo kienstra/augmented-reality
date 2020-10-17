@@ -26,7 +26,7 @@ module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
 		const base64 = buffer.toString( 'base64' );
 
 		// eslint-disable-next-line no-console
-		errorLog.addToLog(
+		errorLog.add(
 			`Here is a screenshot of when the test failed: \n \ndata:image/jpeg;base64,${ base64 }`
 		);
 
@@ -35,7 +35,7 @@ module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
 		);
 
 		// eslint-disable-next-line no-console
-		errorLog.addToLog(
+		errorLog.add(
 			`And here is the HTML of the entire document: \n \n${ dom }`
 		);
 
