@@ -1,14 +1,23 @@
 class ErrorLog {
 	constructor() {
-		this.log = '';
+		this.screenshot = '';
+		this.dom = '';
 	}
 
-	add( message ) {
-		this.log += `\n${ message }`;
+	setScreenshot( screenshot ) {
+		this.screenshot = screenshot;
+	}
+
+	setDom( dom ) {
+		this.dom = dom;
+	}
+
+	getDom() {
+		return this.dom;
 	}
 
 	get() {
-		return this.log;
+		return `Here is a screenshot of when the test failed: \n \ndata:image/jpeg;base64,${ this.screenshot } \nAnd here is the HTML of the entire document: \n \n${ this.dom }`;
 	}
 }
 

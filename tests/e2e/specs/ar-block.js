@@ -57,7 +57,7 @@ test( 'ar-viewer block', async () => {
 	await input.uploadFile( tmpFileName );
 	const buttonSelector = '.media-button-select:not([disabled])';
 	await page.waitForSelector( buttonSelector );
-	await page.click( buttonSelector );
+	await page.click( `.down-not-exist ${ buttonSelector }` );
 
 	// The <model-viewer> component should now render, and the placeholder should have 'Edit Model'.
 	await page.waitForSelector( 'model-viewer' );
