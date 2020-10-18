@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 /**
  * External dependencies
  */
@@ -15,15 +16,18 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 	async onTestResult( ...args ) {
 		const testResult = args[ 1 ];
 		if ( testResult.numFailingTests !== 0 || testResult.failureMessage ) {
-			this.checkForOtherSelector( testResult.failureMessage );
-			console.log( errorLog.get() );
+			this.setProperties( testResult.failureMessage );
+			this.checkForSingleSelector();
+			this.checkForOtherSelectors();
+			// console.log( errorLog.get() );
 		}
 
 		super.onTestResult( ...args );
 	}
 
-	checkForOtherSelector( failureMessage ) {
-		const dom = new JSDOM( errorLog.getDom() );
+	setProperties( failureMessage ) {
+		this.dom = new JSDOM( errorLog.getDom() );
+		this.dividingCharacter = '-';
 		let selectorMatch = failureMessage.match( /for selector: (.*)\n/ );
 		if ( ! selectorMatch ) {
 			selectorMatch = failureMessage.match(
@@ -31,21 +35,116 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			);
 		}
 
-		if ( ! selectorMatch ) {
+		this.fullSelector = selectorMatch ? selectorMatch[ 1 ] : null;
+	}
+
+	checkForBeginningSelector( attributeName, selectorPart ) {
+		let startsWithSelector = selectorPart[ 0 ];
+		for ( let i = 1; i < selectorPart.length; i++ ) {
+			if (
+				this.dom.window.document.querySelector(
+					`[${ attributeName }*="${ startsWithSelector +
+						this.dividingCharacter +
+						selectorPart[ i ] }"]`
+				)
+			) {
+				startsWithSelector =
+					startsWithSelector +
+					this.dividingCharacter +
+					selectorPart[ i ];
+			}
+		}
+
+		if ( startsWithSelector ) {
+			const elementMatchingSelector = this.dom.window.document.querySelector(
+				`[${ attributeName }*="${ startsWithSelector }"]`
+			);
+
+			elementMatchingSelector.classList.forEach( ( elementClass ) => {
+				if ( elementClass.includes( startsWithSelector ) ) {
+					console.log(
+						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector }`
+					);
+				}
+			} );
+		}
+	}
+
+	checkForEndingSelector( attributeName, selectorPart ) {
+		if ( selectorPart.length < 2 ) {
 			return;
 		}
 
-		const fullSelector = selectorMatch[ 1 ];
-		const splitSelector = fullSelector.split( /\s/ );
+		let endsWithSelector = selectorPart[ selectorPart.length - 1 ];
+		for ( let i = selectorPart.length - 2; i >= 0; i-- ) {
+			if (
+				this.dom.window.document.querySelector(
+					`[${ attributeName }$="${ selectorPart[ i ] +
+						this.dividingCharacter +
+						endsWithSelector }"]`
+				)
+			) {
+				endsWithSelector =
+					selectorPart[ i ] +
+					this.dividingCharacter +
+					endsWithSelector;
+			}
+		}
+
+		if ( endsWithSelector ) {
+			const elementMatchingSelector = this.dom.window.document.querySelector(
+				`[${ attributeName }$="${ endsWithSelector }"]`
+			);
+			elementMatchingSelector.classList.forEach( ( elementClass ) => {
+				if ( elementClass.match( `${ endsWithSelector }$` ) ) {
+					console.log(
+						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector }`
+					);
+				}
+			} );
+		}
+	}
+
+	checkForSingleSelector() {
+		if ( ! this.fullSelector ) {
+			return;
+		}
+
+		const matchedSelectorWithoutAttribute = this.fullSelector.match(
+			/^(#|\.)(.*)/
+		);
+		const selectorWithoutAttribute = matchedSelectorWithoutAttribute[ 2 ];
+		const splitSelector = selectorWithoutAttribute.split( /\s/ );
+
+		if ( 1 === splitSelector.length && selectorWithoutAttribute ) {
+			const selectorPart = selectorWithoutAttribute.split(
+				this.dividingCharacter
+			);
+
+			if ( selectorPart.length <= 1 ) {
+				return;
+			}
+
+			const attributeName =
+				'#' === this.fullSelector.charAt( 0 ) ? 'id' : 'class';
+
+			this.checkForBeginningSelector( attributeName, selectorPart );
+			this.checkForEndingSelector( attributeName, selectorPart );
+		}
+	}
+
+	checkForOtherSelectors() {
+		if ( ! this.fullSelector ) {
+			return;
+		}
+
 		const selectorsToIgnore = [ 'div', 'span' ];
+		const splitSelector = this.fullSelector.split( /\s/ );
 		const foundSelectors = splitSelector.filter( ( selectorPart ) => {
-			return dom.window.document.querySelector( selectorPart );
+			return this.dom.window.document.querySelector( selectorPart );
 		} );
 
 		if ( ! foundSelectors.length ) {
-			console.log(
-				`\n🤔 No part of the selector was found in the DOM: \n${ fullSelector } \n`
-			);
 			return;
 		}
 
@@ -76,7 +175,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		}
 
 		console.log(
-			`\n\n...though the full selector isn't: \n\n${ fullSelector } \n`
+			`\n\n...though the full selector isn't: \n\n${ this.fullSelector } \n`
 		);
 	}
 };
