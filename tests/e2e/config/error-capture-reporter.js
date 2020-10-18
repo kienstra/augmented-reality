@@ -19,7 +19,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			this.setProperties( testResult.failureMessage );
 			this.checkForSingleSelector();
 			this.checkForOtherSelectors();
-			// console.log( errorLog.get() );
+			console.log( errorLog.getConsoleMessage() );
 		}
 
 		super.onTestResult( ...args );
@@ -38,30 +38,50 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		this.fullSelector = selectorMatch ? selectorMatch[ 1 ] : null;
 	}
 
+	joinArraySubsetFromBeginning( array, length ) {
+		const copiedArray = array;
+		return copiedArray.splice( 0, length ).join( this.dividingCharacter );
+	}
+
+	joinArraySubsetFromEnd( array, length ) {
+		const copiedArray = array;
+		return copiedArray
+			.splice( copiedArray.length - length, length )
+			.join( this.dividingCharacter );
+	}
+
 	checkForBeginningSelector( attributeName, selectorPart ) {
-		let startsWithSelector = selectorPart[ 0 ];
-		for ( let i = 1; i < selectorPart.length; i++ ) {
+		let validSelector = '';
+		for (
+			let subsetLengthToConsider = 1;
+			subsetLengthToConsider < selectorPart.length;
+			subsetLengthToConsider++
+		) {
+			const selectorSubsetToConsider = this.joinArraySubsetFromBeginning(
+				selectorPart,
+				subsetLengthToConsider
+			);
+
 			if (
 				this.dom.window.document.querySelector(
-					`[${ attributeName }*="${ startsWithSelector +
-						this.dividingCharacter +
-						selectorPart[ i ] }"]`
+					`[${ attributeName }*="${ selectorSubsetToConsider }"]`
 				)
 			) {
-				startsWithSelector =
-					startsWithSelector +
-					this.dividingCharacter +
-					selectorPart[ i ];
+				validSelector = selectorSubsetToConsider;
 			}
 		}
 
-		if ( startsWithSelector ) {
+		if ( validSelector ) {
 			const elementMatchingSelector = this.dom.window.document.querySelector(
-				`[${ attributeName }*="${ startsWithSelector }"]`
+				`[${ attributeName }*="${ validSelector }"]`
 			);
 
+			if ( ! elementMatchingSelector ) {
+				return;
+			}
+
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
-				if ( elementClass.includes( startsWithSelector ) ) {
+				if ( elementClass.includes( validSelector ) ) {
 					console.log(
 						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector }`
 					);
@@ -71,23 +91,23 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 	}
 
 	checkForEndingSelector( attributeName, selectorPart ) {
-		if ( selectorPart.length < 2 ) {
-			return;
-		}
+		let endsWithSelector = '';
+		for (
+			let subsetLengthToConsider = 1;
+			subsetLengthToConsider < selectorPart.length;
+			subsetLengthToConsider++
+		) {
+			const selectorSubsetToConsider = this.joinArraySubsetFromEnd(
+				selectorPart,
+				subsetLengthToConsider
+			);
 
-		let endsWithSelector = selectorPart[ selectorPart.length - 1 ];
-		for ( let i = selectorPart.length - 2; i >= 0; i-- ) {
 			if (
 				this.dom.window.document.querySelector(
-					`[${ attributeName }$="${ selectorPart[ i ] +
-						this.dividingCharacter +
-						endsWithSelector }"]`
+					`[${ attributeName }$="${ subsetLengthToConsider }"]`
 				)
 			) {
-				endsWithSelector =
-					selectorPart[ i ] +
-					this.dividingCharacter +
-					endsWithSelector;
+				endsWithSelector = selectorSubsetToConsider;
 			}
 		}
 
@@ -95,6 +115,11 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			const elementMatchingSelector = this.dom.window.document.querySelector(
 				`[${ attributeName }$="${ endsWithSelector }"]`
 			);
+
+			if ( ! elementMatchingSelector ) {
+				return;
+			}
+
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
 				if ( elementClass.match( `${ endsWithSelector }$` ) ) {
 					console.log(
@@ -105,6 +130,9 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		}
 	}
 
+	/**
+	 * If the selector only has one part, like .foo-baz, this checks if there is a similar valid selector.
+	 */
 	checkForSingleSelector() {
 		if ( ! this.fullSelector ) {
 			return;
@@ -117,19 +145,19 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		const splitSelector = selectorWithoutAttribute.split( /\s/ );
 
 		if ( 1 === splitSelector.length && selectorWithoutAttribute ) {
-			const selectorPart = selectorWithoutAttribute.split(
+			const selectorParts = selectorWithoutAttribute.split(
 				this.dividingCharacter
 			);
 
-			if ( selectorPart.length <= 1 ) {
+			if ( selectorParts.length < 2 ) {
 				return;
 			}
 
 			const attributeName =
 				'#' === this.fullSelector.charAt( 0 ) ? 'id' : 'class';
 
-			this.checkForBeginningSelector( attributeName, selectorPart );
-			this.checkForEndingSelector( attributeName, selectorPart );
+			this.checkForBeginningSelector( attributeName, selectorParts );
+			this.checkForEndingSelector( attributeName, selectorParts );
 		}
 	}
 
@@ -158,7 +186,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			return;
 		}
 
-		console.log( `\n💡 Maybe the selector changed.` );
+		console.log( `\n💡 Maybe the DOM structure changed.` );
 
 		if ( foundSelectors.length > 1 ) {
 			console.log(

@@ -16,8 +16,8 @@ class ErrorLog {
 		return this.dom;
 	}
 
-	get() {
-		return `Here is a screenshot of when the test failed: \n \ndata:image/jpeg;base64,${ this.screenshot } \nAnd here is the HTML of the entire document: \n \n${ this.dom }`;
+	getConsoleMessage() {
+		return `Here is a screenshot of when the test failed: \n \ndata:image/jpeg;base64,${ this.screenshot } \n`;
 	}
 }
 

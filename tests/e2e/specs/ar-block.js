@@ -55,7 +55,7 @@ test( 'ar-viewer block', async () => {
 
 	// Upload a .glb file to the Media Library and insert it into the block.
 	await input.uploadFile( tmpFileName );
-	const buttonSelector = '.media-button-select:not([disabled])';
+	const buttonSelector = '.wrong .media-button-select:not([disabled])';
 	await page.waitForSelector( buttonSelector );
 	await page.click( buttonSelector );
 
