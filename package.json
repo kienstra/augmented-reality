@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@google/model-viewer": "0.10.0",
-    "@jest/reporters": "26.5.3",
+    "@jest/reporters": "26.6.1",
     "@testing-library/jest-dom": "5.10.1",
     "@testing-library/react": "10.2.1",
     "@wordpress/api-fetch": "3.16.0",
