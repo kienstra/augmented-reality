@@ -10,6 +10,31 @@ const PuppeteerEnvironment = require( 'jest-environment-puppeteer' );
 const errorLog = require( './error-log' );
 
 module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
+	async setup() {
+		await super.setup();
+
+		const cdpSession = await this.global.page.target().createCDPSession();
+		await cdpSession.send( 'Network.enable' );
+
+		cdpSession.on( 'Network.responseReceived', ( message ) => {
+			const status =
+				message && message.response && message.response.status
+					? message.response.status
+					: null;
+			if ( ! status ) {
+				return;
+			}
+
+			if ( status >= 300 || status < 200 ) {
+				errorLog.addNetworkError( message.response );
+			}
+		} );
+
+		cdpSession.on( 'Network.loadingFailed', ( message ) => {
+			errorLog.addLoadingFailed( message );
+		} );
+	}
+
 	async teardown() {
 		const screenshotPath = path.join(
 			__dirname,
@@ -25,7 +50,6 @@ module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
 		const buffer = Buffer.from( screenshot, screenshotType );
 		const base64 = buffer.toString( 'base64' );
 
-		// eslint-disable-next-line no-console
 		errorLog.setScreenshot( base64 );
 		const dom = await this.global.page.evaluate(
 			() => document.documentElement.outerHTML

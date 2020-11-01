@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 /**
  * External dependencies
  */
@@ -8,18 +6,20 @@ const { VerboseReporter } = require( '@jest/reporters' );
 /**
  * Internal dependencies
  */
-const errorLog = require( './error-log.js' );
 const jsdom = require( 'jsdom' );
 const { JSDOM } = jsdom;
+const errorLog = require( './error-log' );
 
 module.exports = class ErrorCaptureReporter extends VerboseReporter {
-	async onTestResult( ...args ) {
-		const testResult = args[ 1 ];
+	onTestResult( ...args ) {
+		const [ , testResult ] = args;
 		if ( testResult.numFailingTests !== 0 || testResult.failureMessage ) {
 			this.setProperties( testResult.failureMessage );
 			this.checkForSingleSelector();
-			this.checkForOtherSelectors();
-			console.log( errorLog.getConsoleMessage() );
+			this.checkCompoundSelector();
+			console.log( errorLog.getScreenshotMessage() );
+			console.log( errorLog.getNetworkErrors() );
+			console.log( errorLog.getLoadingFailedErrors() );
 		}
 
 		super.onTestResult( ...args );
@@ -36,18 +36,6 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		}
 
 		this.fullSelector = selectorMatch ? selectorMatch[ 1 ] : null;
-	}
-
-	joinArraySubsetFromBeginning( array, length ) {
-		const copiedArray = array;
-		return copiedArray.splice( 0, length ).join( this.dividingCharacter );
-	}
-
-	joinArraySubsetFromEnd( array, length ) {
-		const copiedArray = array;
-		return copiedArray
-			.splice( copiedArray.length - length, length )
-			.join( this.dividingCharacter );
 	}
 
 	checkForBeginningSelector( attributeName, selectorPart ) {
@@ -90,6 +78,18 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		}
 	}
 
+	joinArraySubsetFromBeginning( array, length ) {
+		const copiedArray = array;
+		return copiedArray.splice( 0, length ).join( this.dividingCharacter );
+	}
+
+	joinArraySubsetFromEnd( array, length ) {
+		const copiedArray = array;
+		return copiedArray
+			.splice( copiedArray.length - length, length )
+			.join( this.dividingCharacter );
+	}
+
 	checkForEndingSelector( attributeName, selectorPart ) {
 		let endsWithSelector = '';
 		for (
@@ -104,7 +104,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 
 			if (
 				this.dom.window.document.querySelector(
-					`[${ attributeName }$="${ subsetLengthToConsider }"]`
+					`[${ attributeName }$="${ selectorSubsetToConsider }"]`
 				)
 			) {
 				endsWithSelector = selectorSubsetToConsider;
@@ -161,7 +161,10 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		}
 	}
 
-	checkForOtherSelectors() {
+	/**
+	 * For compound selectors like .foo .baz, this checks whether a part of it is valid, like .foo.
+	 */
+	checkCompoundSelector() {
 		if ( ! this.fullSelector ) {
 			return;
 		}

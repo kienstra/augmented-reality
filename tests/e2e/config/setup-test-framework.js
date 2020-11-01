@@ -25,6 +25,11 @@ import {
 import { addQueryArgs } from '@wordpress/url';
 
 /**
+ * Internal dependencies
+ */
+import errorLog from './error-log';
+
+/**
  * Timeout, in seconds, that the test should be allowed to run.
  *
  * @type {string|undefined}
@@ -253,6 +258,20 @@ beforeAll( async () => {
 	capturePageEventsForTearDown();
 	enablePageDialogAccept();
 	observeConsoleLogging();
+
+	const cdpSession = await page.target().createCDPSession();
+	await cdpSession.send( 'Network.enable' );
+
+	cdpSession.on( 'Network.responseReceived', ( message ) => {
+		const status =
+			message && message.response && message.response.status
+				? message.response.status
+				: null;
+		if ( status && 200 !== status ) {
+			errorLog.addNetworkError( message.response );
+		}
+	} );
+
 	await setupBrowser();
 	await activatePlugin( PLUGIN );
 	await trashExistingPosts();

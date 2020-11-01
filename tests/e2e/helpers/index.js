@@ -32,7 +32,7 @@ export const insertBlockFromInserter = async ( blockName ) => {
  */
 export const compareToScreenshot = async () => {
 	const editor = await page.waitForSelector(
-		'.interface-interface-skeleton__body'
+		'.block-editor-editor-skeleton__body'
 	);
 	const blockScreenshot = await editor.screenshot();
 
