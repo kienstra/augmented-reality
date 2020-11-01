@@ -82,7 +82,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
 				if ( 0 === elementClass.indexOf( validSelector ) ) {
 					console.log(
-						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector }`
+						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector } \n`
 					);
 				}
 			} );
@@ -90,14 +90,12 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 	}
 
 	joinArraySubsetFromBeginning( array, length ) {
-		const copiedArray = array;
-		return copiedArray.splice( 0, length ).join( this.dividingCharacter );
+		return array.slice( 0, length ).join( this.dividingCharacter );
 	}
 
 	joinArraySubsetFromEnd( array, length ) {
-		const copiedArray = array;
-		return copiedArray
-			.splice( copiedArray.length - length, length )
+		return array
+			.slice( array.length - length, array.length )
 			.join( this.dividingCharacter );
 	}
 
@@ -144,7 +142,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
 				if ( elementClass.match( `${ endsWithSelector }$` ) ) {
 					console.log(
-						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector }`
+						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector } \n`
 					);
 				}
 			} );
