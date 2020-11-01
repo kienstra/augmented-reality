@@ -46,6 +46,7 @@ before_install:
     fi
 
 install:
+  - composer self-update --rollback 1.10.16
   - composer install
   - nvm install --lts
   - npm install

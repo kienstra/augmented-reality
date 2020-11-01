@@ -38,6 +38,17 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		this.fullSelector = selectorMatch ? selectorMatch[ 1 ] : null;
 	}
 
+	/**
+	 * If a selector doesn't match, check if a similar one does.
+	 *
+	 * Sometimes, a selector will have changed.
+	 * For example, if this doesn't match: .block-editor-field-setting
+	 * maybe it changed to .block-editor-field-attribute
+	 * Then, this can suggest that class instead of the failed class.
+	 *
+	 * @param {string} attributeName The name of the attribute, like 'class'.
+	 * @param {Array} selectorPart An array of a selector, split by '-'.
+	 */
 	checkForBeginningSelector( attributeName, selectorPart ) {
 		let validSelector = '';
 		for (
@@ -69,7 +80,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			}
 
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
-				if ( elementClass.includes( validSelector ) ) {
+				if ( 0 === elementClass.indexOf( validSelector ) ) {
 					console.log(
 						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector }`
 					);
@@ -90,6 +101,16 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 			.join( this.dividingCharacter );
 	}
 
+	/**
+	 * If a selector doesn't match, check if a similar one does, starting from the end.
+	 *
+	 * Sometimes, the first part of selector will have changed.
+	 * For example, maybe this selector .block-editor-editor-skeleton__body
+	 * changed to .interface-interface-skeleton__body
+	 *
+	 * @param {string} attributeName The name of the attribute, like 'class'.
+	 * @param {Array} selectorPart An array of a selector, split by '-'.
+	 */
 	checkForEndingSelector( attributeName, selectorPart ) {
 		let endsWithSelector = '';
 		for (
