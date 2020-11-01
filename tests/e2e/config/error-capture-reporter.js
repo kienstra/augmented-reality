@@ -11,6 +11,12 @@ const { JSDOM } = jsdom;
 const errorLog = require( './error-log' );
 
 module.exports = class ErrorCaptureReporter extends VerboseReporter {
+
+	/**
+	 * Runs on a test result.
+	 *
+	 * @inheritdoc
+	 */
 	onTestResult( ...args ) {
 		const [ , testResult ] = args;
 		if ( testResult.numFailingTests !== 0 || testResult.failureMessage ) {
@@ -25,9 +31,15 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 		super.onTestResult( ...args );
 	}
 
+	/**
+	 * Sets the properties.
+	 *
+	 * @param {string} failureMessage The test failure message.
+	 */
 	setProperties( failureMessage ) {
 		this.dom = new JSDOM( errorLog.getDom() );
 		this.dividingCharacter = '-';
+		this.validSelectors = [];
 		let selectorMatch = failureMessage.match( /for selector: (.*)\n/ );
 		if ( ! selectorMatch ) {
 			selectorMatch = failureMessage.match(
@@ -81,18 +93,51 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
 				if ( 0 === elementClass.indexOf( validSelector ) ) {
-					console.log(
-						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector } \n`
-					);
+					this.validSelectors.push( elementClass );
 				}
 			} );
 		}
 	}
 
+	/**
+	 * Logs alternate selectors.
+	 *
+	 * @param {string} attributeName The name of an attribute, like 'class'.
+	 */
+	logAlternateSelectors( attributeName ) {
+		if ( ! this.fullSelector.length ) {
+			return;
+		}
+
+		if ( 1 === this.fullSelector.length ) {
+			console.log(
+				`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ this.validSelectors[ 0 ] } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector } \n`
+			);
+		} else {
+			console.log(
+				`\n💡 Maybe the selector changed. Here are other valid ${ attributeName } selectors: \n\n${ this.validSelectors.join( ', ' ) } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector } \n`
+			);
+		}
+	}
+
+	/**
+	 * Joins an array subset of a given length.
+	 *
+	 * @param {Array} array The array to operate on.
+	 * @param {number} length The length of the subset.
+	 * @return {string} The joined array.
+	 */
 	joinArraySubsetFromBeginning( array, length ) {
 		return array.slice( 0, length ).join( this.dividingCharacter );
 	}
 
+	/**
+	 * Joins an array subset of a given length, starting from the end.
+	 *
+	 * @param {Array} array The array to operate on.
+	 * @param {number} length The length of the subset.
+	 * @return {string} The joined array.
+	 */
 	joinArraySubsetFromEnd( array, length ) {
 		return array
 			.slice( array.length - length, array.length )
@@ -141,9 +186,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 
 			elementMatchingSelector.classList.forEach( ( elementClass ) => {
 				if ( elementClass.match( `${ endsWithSelector }$` ) ) {
-					console.log(
-						`\n💡 Maybe the selector changed. There is a ${ attributeName } of: \n\n${ elementClass } \n\n...similar to the failed ${ attributeName } of: \n\n${ this.fullSelector } \n`
-					);
+					this.validSelectors.push( elementClass );
 				}
 			} );
 		}
@@ -177,6 +220,7 @@ module.exports = class ErrorCaptureReporter extends VerboseReporter {
 
 			this.checkForBeginningSelector( attributeName, selectorParts );
 			this.checkForEndingSelector( attributeName, selectorParts );
+			this.logAlternateSelectors( attributeName );
 		}
 	}
 

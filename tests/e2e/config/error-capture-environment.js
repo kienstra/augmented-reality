@@ -10,6 +10,12 @@ const PuppeteerEnvironment = require( 'jest-environment-puppeteer' );
 const errorLog = require( './error-log' );
 
 module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
+
+	/**
+	 * Sets up the environment.
+	 *
+	 * @inheritdoc
+	 */
 	async setup() {
 		await super.setup();
 
@@ -35,6 +41,11 @@ module.exports = class ErrorCaptureEnvironment extends PuppeteerEnvironment {
 		} );
 	}
 
+	/**
+	 * Tears down the environment.
+	 *
+	 * @inheritdoc
+	 */
 	async teardown() {
 		const screenshotPath = path.join(
 			__dirname,
