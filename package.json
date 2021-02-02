@@ -24,7 +24,7 @@
     "@google/model-viewer": "0.10.0",
     "@testing-library/jest-dom": "5.10.1",
     "@testing-library/react": "10.2.1",
-    "@wordpress/api-fetch": "3.16.0",
+    "@wordpress/api-fetch": "3.21.5",
     "@wordpress/block-editor": "4.0.0",
     "@wordpress/blocks": "6.17.0",
     "@wordpress/components": "9.7.0",
