@@ -32,7 +32,7 @@
     "@wordpress/deprecated": "2.8.0",
     "@wordpress/dom-ready": "2.9.0",
     "@wordpress/e2e-test-utils": "4.8.0",
-    "@wordpress/editor": "9.17.0",
+    "@wordpress/editor": "9.26.0",
     "@wordpress/element": "2.14.0",
     "@wordpress/env": "1.4.0",
     "@wordpress/eslint-plugin": "6.1.0",
