@@ -41,7 +41,7 @@
     "@wordpress/icons": "2.1.0",
     "@wordpress/jest-puppeteer-axe": "1.8.0",
     "@wordpress/media-utils": "1.12.0",
-    "@wordpress/scripts": "10.0.0",
+    "@wordpress/scripts": "16.1.1",
     "eslint": "7.2.0",
     "eslint-plugin-eslint-comments": "3.2.0",
     "eslint-plugin-import": "2.21.2",
